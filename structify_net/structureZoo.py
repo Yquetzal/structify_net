@@ -1,0 +1,357 @@
+from scipy.spatial.distance import euclidean
+import itertools
+import random
+import math
+import networkx as nx
+import numpy as np
+from .rank2proba import Rank_model, Graph_generator
+
+#We can choose the number of dimensions
+#Add random positions in [0,1] in d dimensions, with names d1, d2, etc. to nodes
+def _assign_ordinal_attributes(nb_nodes,d,g=None):
+    if g==None:
+        g=nx.Graph()
+        g.add_nodes_from(range(nb_nodes))
+    for i_dim in range(d):
+        attributes= np.random.random(nb_nodes)
+        nx.set_node_attributes(g,{i:a for i,a in enumerate(attributes)},"d"+str(i_dim+1))
+    return(g)
+
+
+def sort_ER(nodes):
+    if not isinstance(nodes,nx.Graph):
+        g=n_to_graph(nodes)
+    else:
+        g=nodes
+    order = list(itertools.combinations(g.nodes,2))
+    random.shuffle(order)
+    return Rank_model(order,g)
+
+def ER_generator(n,m=None,p=None):
+    if m==None and p==None:
+        raise ValueError("Either m or p must be specified")
+    if m==None:
+        m=int(n*p)
+    Graph_generator.ER(n,m)
+#We can choose the number of (equal size) blocks
+#Assign random blocks/communities to nodes, keeping blocks of same size
+def _assign_nominal_attributes(blocks,nb_nodes=None,g=None,name="block1"):
+    if g==None:
+        g=nx.Graph()
+        g.add_nodes_from(range(nb_nodes))
+    if nb_nodes==None:
+        nb_nodes=len(g.nodes)
+        
+        
+    if isinstance(blocks,int):
+        node_per_block=int(nb_nodes/blocks)
+        affils=[]
+        for b in range(blocks):
+            affils+=[b]*node_per_block
+        unaffiled=nb_nodes-len(affils)
+        if unaffiled>0:
+            affils+=list(range(blocks))[:unaffiled]
+    
+    random.shuffle(affils)
+    n2affil={n:affils[i] for i,n in enumerate(g.nodes)}
+    nx.set_node_attributes(g,n2affil,name)
+    return(g)
+
+def n_to_graph(n):
+    g = nx.Graph()
+    g.add_nodes_from(range(n))
+    return g
+
+#Spatial/Geometric network, homophily (Ordinal)
+#Nodes are ranked according to the euclidean distance between their attributes. 
+#Typically, 1Dimension for homophily, 2 for spatial.
+def sort_distances(nodes,dimensions=1,distance=euclidean):
+    if not isinstance(nodes,nx.Graph):
+        g=n_to_graph(nodes)
+    else:
+        g=nodes
+
+    if isinstance(dimensions,int):
+        g = _assign_ordinal_attributes(len(g.nodes),dimensions)
+        dimensions=["d"+str(i_dim+1) for i_dim in range(dimensions)]
+    sorted_pairs=itertools.combinations(g.nodes,2)
+    positions={n:[g.nodes[n][d] for d in dimensions] for n in g.nodes}
+    sorted_pairs={(u,v):distance(positions[u],positions[v]) for u,v in sorted_pairs}
+    sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=False)
+
+    sorted_pairs=[e[0] for e in sorted_pairs]
+    return Rank_model(sorted_pairs, g)
+
+#Defining assortative blocks/communities. 
+#Be carefull that pairs are ordered both inside and outside blocks (favor low number nodes)
+def sort_blocks_assortative(nodes,blocks=None):
+    if not isinstance(nodes,nx.Graph):
+        g=n_to_graph(nodes)
+    else:
+        g=nodes
+
+    sorted_pairs=itertools.combinations(g.nodes,2)
+    if blocks==None:
+        blocks=math.ceil(math.sqrt(len(g.nodes)))
+    if isinstance(blocks,int):
+        g = _assign_nominal_attributes(blocks,len(g.nodes),g)
+        blocks="block1"
+    if isinstance(blocks,list):
+        affiliations= {n:i  for i,b in enumerate(blocks) for n in b}
+        nx.set_node_attributes(g,affiliations,"block1")
+        blocks="block1"
+    
+    blocks=nx.get_node_attributes(g,blocks)
+    sorted_pairs={(u,v): 2+random.random() if blocks[u]==blocks[v] else 0+random.random() for u,v in sorted_pairs}
+    sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=True)
+    sorted_pairs=[e[0] for e in sorted_pairs]
+
+    return Rank_model(sorted_pairs, g)
+
+def _flatten(l):
+    return [item for sublist in l for item in sublist]
+
+def sort_overlap_communities(nodes,blocks=None):
+    if not isinstance(nodes,nx.Graph):
+        g=n_to_graph(nodes)
+    else:
+        g=nodes
+    n=len(g.nodes)
+    if blocks==None:
+        blocks=math.ceil(math.sqrt(n))
+        
+    if isinstance(blocks,int):
+        block_size=math.ceil(n/(blocks/2))
+        nb_blocks_by_level=int(blocks/2)
+        block1=_flatten([[i]*block_size for i in range(nb_blocks_by_level)])[:n]
+        largest_id=max(block1)
+        block2=_flatten([[i+largest_id+1]*block_size for i in range(nb_blocks_by_level)])[:n]
+        block2 = block2[int(block_size/2):]+block2[:int(block_size/2)]
+        nx.set_node_attributes(g,{i:b for i,b in enumerate(block1)},"block1")
+        nx.set_node_attributes(g,{i:b for i,b in enumerate(block2)},"block2")
+        blocks=["block1","block2"]
+        #g = _assign_nominal_attributes(block_id,len(g.nodes),g)
+        #block_id="block"
+    
+    sorted_pairs=itertools.combinations(g.nodes,2)
+
+    all_blocks={}
+    for b in blocks:
+        affiliations=nx.get_node_attributes(g,b)
+        all_blocks[b]=affiliations
+    similarity={}
+    for u,v in sorted_pairs:
+        similarity[(u,v)]=np.random.random()/100
+        for b in blocks:
+            if all_blocks[b][u]==all_blocks[b][v]:
+                similarity[(u,v)]=1+np.random.random()/100
+                #similarity[(u,v)]+=1
+    sorted_pairs = sorted(similarity.items(), key=lambda e: e[1],reverse=True)
+    #sorted_pairs={(u,v): 2+random.random() if blocks[u]==blocks[v] else 0+random.random() for u,v in sorted_pairs}
+    sorted_pairs=[e[0] for e in sorted_pairs]
+
+    return Rank_model(sorted_pairs, g)
+
+#Defining assortative blocks/communities. 
+#Be carefull that pairs are ordered both inside and outside blocks (favor low number nodes)
+def sort_largest_disconnected_cliques(nodes,m):
+    if not isinstance(nodes,nx.Graph):
+        g=n_to_graph(nodes)
+    else:
+        g=nodes
+
+    sorted_pairs=itertools.combinations(g.nodes,2)
+    n=len(g.nodes())
+    #(c*(c-1)/2)*k<=m, c*k=n, I want to find the largest possible k
+    #nb_c= = (n/m) / 2 + sqrt((n/m)^2/4 - 2)
+    c_size=math.ceil((2*m)/n+1) #Because we know the average degree, so the correst size for a clique
+    nb_c=math.floor(n/c_size)
+    missing=n-c_size*nb_c
+    affil = [[c_label]*c_size for c_label in range(nb_c)]
+    affil = [item for sublist in affil for item in sublist]+[nb_c-1]*missing
+    blocks={i:affil[i] for i in range(n)}
+    sorted_pairs={(u,v): 2+random.random() if blocks[u]==blocks[v] else 0+random.random() for u,v in sorted_pairs}
+    sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=True)
+    return Rank_model([e[0] for e in sorted_pairs], g)
+
+#Defining a degree heterogeneous network. Pairs of nodes are sorted such as all pairs of nodes of node n1 are first,
+# then all pairs of nodes of node n2, etc. The strongest structure corresponds to a star structure: a few nodes
+# are connected to all others, that have only this link.
+def sort_stars(nodes):
+    if not isinstance(nodes,nx.Graph):
+        g=n_to_graph(nodes)
+    else:
+        g=nodes
+
+    sorted_pairs=itertools.combinations(g.nodes,2)
+    return Rank_model(list(sorted_pairs), g)
+
+# A proposition of a (continuous) core-periphery organization. Pairs of nodes are sorted according to the sum 
+# of the distance of their nodes to the center of the space.
+def sort_core_distance(nodes,dimensions=1,distance=euclidean):
+    if not isinstance(nodes,nx.Graph):
+        g=n_to_graph(nodes)
+    else:
+        g=nodes
+    if isinstance(dimensions,int):
+        g = _assign_ordinal_attributes(len(g.nodes),dimensions)
+        dimensions=["d"+str(i_dim+1) for i_dim in range(dimensions)]
+
+    sorted_pairs=itertools.combinations(g.nodes,2)
+    positions={n:[g.nodes[n][d] for d in dimensions] for n in g.nodes}
+    def core_distance(u,v):
+        return distance(positions[u],[0.5]*len(dimensions))*distance(positions[v],[0.5]*len(dimensions))
+    sorted_pairs={(u,v):core_distance(u,v) for u,v in sorted_pairs}
+    sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=False)
+    sorted_pairs=[e[0] for e in sorted_pairs]
+    return Rank_model(sorted_pairs, g)
+
+def sort_spatial_WS(nodes,k=10):
+    """
+    k: number of neighbors
+    """
+    if not isinstance(nodes,nx.Graph):
+        g=n_to_graph(nodes)
+    else:
+        g=nodes
+
+    sorted_pairs=itertools.combinations(g.nodes,2)
+    def my_dist(u,v):
+        if ((v-u)%(len(g.nodes)-(k/2))<=k/2):
+            return 0+random.random()
+        return 2+random.random()
+    sorted_pairs={(u,v):my_dist(u,v) for u,v in sorted_pairs}
+    sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=False)
+    return Rank_model([e[0] for e in sorted_pairs], g)
+
+def sort_fractal_leaves(nodes,d=2):
+    if not isinstance(nodes,nx.Graph):
+        g=n_to_graph(nodes)
+    else:
+        g=nodes
+
+    nb_nodes=len(g.nodes)
+    height = math.ceil(math.log(nb_nodes, d))
+    binary_tree = nx.balanced_tree(d,height)
+    leaves_ids=list(binary_tree.nodes)[-nb_nodes:]
+    binary_tree = nx.relabel_nodes(binary_tree,{n:"temp_"+str(i) for i,n in enumerate(leaves_ids)})
+
+    pairs=itertools.combinations(g.nodes,2)
+    all_distances = {x:v for x,v in nx.all_pairs_shortest_path_length(binary_tree)}
+    #print(all_distances)
+    sorted_pairs = {(u,v):all_distances["temp_"+str(u)]["temp_"+str(v)]+random.random()/10 for (u,v) in pairs}
+    sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=False)
+    return Rank_model([e[0] for e in sorted_pairs], g)
+
+def sort_fractal_root(nodes,d=2):
+    if not isinstance(nodes,nx.Graph):
+        g=n_to_graph(nodes)
+    else:
+        g=nodes
+
+    nb_nodes=len(g.nodes)
+    height = math.ceil(math.log(nb_nodes, d)+1)
+    binary_tree = nx.balanced_tree(d,height-1)
+    leaves_ids=list(binary_tree.nodes)[:nb_nodes]
+    binary_tree = nx.relabel_nodes(binary_tree,{n:"temp_"+str(i) for i,n in enumerate(leaves_ids)})
+
+    pairs=itertools.combinations(g.nodes,2)
+    all_distances = {x:v for x,v in nx.all_pairs_shortest_path_length(binary_tree)}
+    sorted_pairs = {(u,v):all_distances["temp_"+str(u)]["temp_"+str(v)]+random.random()/10 for (u,v) in pairs}
+    sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=False)
+    return Rank_model([e[0] for e in sorted_pairs], g)
+
+def sort_nestedness(nodes):
+    if not isinstance(nodes,nx.Graph):
+        g=n_to_graph(nodes)
+    else:
+        g=nodes
+
+    sorted_pairs=itertools.combinations(g.nodes,2)
+    sorted_pairs = sorted(list(sorted_pairs),key=lambda x: x[0]+x[1])
+    return Rank_model(sorted_pairs, g)
+
+def sort_fractal_hierarchical(nodes,d=3):
+    if not isinstance(nodes,nx.Graph):
+        g=n_to_graph(nodes)
+    else:
+        g=nodes
+
+    nb_nodes=len(g.nodes)
+    height = math.ceil(math.log(nb_nodes, d)+1)
+    binary_tree = nx.balanced_tree(d,height-1)
+    leaves_ids=list(binary_tree.nodes)[:nb_nodes]
+    binary_tree = nx.relabel_nodes(binary_tree,{n:"temp_"+str(i) for i,n in enumerate(leaves_ids)})
+
+    pairs=itertools.combinations(g.nodes,2)
+    all_distances = {x:v for x,v in nx.all_pairs_shortest_path_length(binary_tree) }
+    #degrees = {k:v for k,v in binary_tree.degree}
+    heights = nx.shortest_path_length(binary_tree,"temp_"+str(0))
+    
+    def child_of(u,v):
+        return all_distances["temp_"+str(u)]["temp_"+str(v)]==abs(heights["temp_"+str(u)]-heights["temp_"+str(v)])
+    
+    def child_score(u,v):
+        #return height-max(heights["temp_"+str(u)],heights["temp_"+str(v)])
+        return height-1-abs(heights["temp_"+str(u)]-heights["temp_"+str(v)])
+    
+    def family_score(u,v):
+        return (all_distances["temp_"+str(u)]["temp_"+str(v)]-2)*1000+height-1-max(heights["temp_"+str(u)],heights["temp_"+str(v)])#+child_score(u,v)
+                                                                  
+    sorted_pairs = {(u,v):child_score(u,v) if child_of(u,v) else family_score(u,v) for (u,v) in pairs}
+    sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=False)
+    return Rank_model([e[0] for e in sorted_pairs], g)
+
+def sort_fractal_star(nodes,d=2):
+    if not isinstance(nodes,nx.Graph):
+        g=n_to_graph(nodes)
+    else:
+        g=nodes
+
+    nb_nodes=len(g.nodes)
+    height = math.ceil(math.log(nb_nodes, d)+1)
+    binary_tree = nx.balanced_tree(d,height-1)
+    leaves_ids=list(binary_tree.nodes)[:nb_nodes]
+    binary_tree = nx.relabel_nodes(binary_tree,{n:"temp_"+str(i) for i,n in enumerate(leaves_ids)})
+
+    pairs=itertools.combinations(g.nodes,2)
+    #all_distances = {x:v for x,v in nx.all_pairs_shortest_path_length(binary_tree) }
+    #degrees = {k:v for k,v in binary_tree.degree}
+    heights = nx.shortest_path_length(binary_tree,"temp_"+str(0))
+    sorted_pairs = {(u,v):-abs(heights["temp_"+str(u)]-heights["temp_"+str(v)])+random.random()/1000 for (u,v) in pairs}
+    sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=False)
+    return Rank_model([e[0] for e in sorted_pairs], g)
+
+def sort_smallWorldTrick(nodes):
+    if not isinstance(nodes,nx.Graph):
+        g=n_to_graph(nodes)
+    else:
+        g=nodes
+
+    sorted_pairs=itertools.combinations(g.nodes,2)
+    
+    def trick(x):
+        if x[0]==0 or x[1]==0:
+            return 0
+        return x[0]+x[1]
+        
+    sorted_pairs = sorted(list(sorted_pairs),key=trick)
+    return Rank_model([e[0] for e in sorted_pairs], g)
+
+
+
+all_models_no_param={"ER":sort_ER,"spatial":sort_distances,"spatialWS":sort_spatial_WS,"blocks_assortative":sort_blocks_assortative,"overlapping_communities":sort_overlap_communities,
+             "nestedness":sort_nestedness,"maximal_stars":sort_stars,"core_distance":sort_core_distance,"fractal_leaves":sort_fractal_leaves,
+             "fractal_root":sort_fractal_root,"fractal_hierarchy":sort_fractal_hierarchical,"fractal_star":sort_fractal_star,}
+
+all_models_with_m={"disconnected_cliques":sort_largest_disconnected_cliques}
+all_models=all_models_no_param|all_models_with_m
+
+def get_all_rank_models(n,m):
+    to_return = {name:f(n) for name,f in all_models_no_param.items()}
+    to_return = to_return|{name:f(n,m) for name,f in all_models_with_m.items()}
+    return to_return
+
+#def get_all_generators(n,m):
+#    to_return = {name:f(n).get_generator for name,f in all_models_no_param.items()}
+#    return to_return
