@@ -3,62 +3,23 @@ import numpy as np
 from scipy.special import comb
 from bisect import bisect
 import networkx as nx
-from .viz import plot_rank_matrix
+import structify_net as stn
 
-class Graph_generator:
-    def __init__(self, sortedPairs, probas):
-        self.sortedPairs=sortedPairs
-        self.probas=probas
-    
-    def generate(self):
-        return proba2graph(self.sortedPairs, self.probas)
-    
-    def ER(n, p):
-        return proba2graph(list(itertools.combinations(range(n),2)), [p]*comb(n,2,exact=True))
-
-class Rank_model:
-    def __init__(self, sortedPairs, node_properties):
-        self.sortedPairs=sortedPairs
-        self.node_properties=node_properties
-    
-    def get_generator(self,epsilon,density=None,m=None):
-        probas=rank2proba(self.sortedPairs,epsilon,density,m)
-        return Graph_generator(self.sortedPairs, probas)
-
-    def plot_matrix(self,nodeOrder=None,ax=None):
-        plot_rank_matrix(self.sortedPairs,nodeOrder=nodeOrder,ax=ax)
-        
-def structure2graph(nodes,ranking_function,epsilon,density=None,m=None):
-    """
-    Return a graph from a structure function
-    g: a networkx graph
-    ranking_function: a function that takes a graph and returns a list of node pairs, ordered by the order in which they should appear in the graph
-    epsilon: a weight between 0 and 1, that determines how much the graph should be structured
-    """
-    model = structure2model(nodes,ranking_function,epsilon,density,m)
+def _structure2graph(nodes,ranking_function,epsilon,density=None,m=None):
+    model = _structure2model(nodes,ranking_function,epsilon,density,m)
     return model.generate()
 
-def structure2model(nodes,ranking_function,epsilon,density=None,m=None):
-    """
-    Return a graph from a structure function
-    g: a networkx graph
-    ranking_function: a function that takes a graph and returns a list of node pairs, ordered by the order in which they should appear in the graph
-    epsilon: a weight between 0 and 1, that determines how much the graph should be structured
-    """
+def _structure2model(nodes,ranking_function,epsilon,density=None,m=None):
     if not isinstance(nodes, nx.Graph):
         g = nx.Graph()
         g.add_nodes_from(range(nodes))
         nodes=g
 
     sortedPairs=ranking_function(g)
-    probas=rank2proba(sortedPairs,epsilon,density,m)
+    probas=_rank2proba(sortedPairs,epsilon,density,m)
     return Graph_generator(sortedPairs, probas)
 
-def proba2graph(sortedPairs, probas):
-    """
-    Return a graph from a list of probabilities
-    probas: a list of probabilities, ordered by the order in which the edges should appear in the graph
-    """
+def _proba2graph(sortedPairs, probas):
     edges=[]
     for i,p in enumerate(probas):
         if np.random.random()<p:
@@ -69,14 +30,16 @@ def proba2graph(sortedPairs, probas):
     newG.add_edges_from(edges)
     return newG
 
-def rank2proba(sorted_pairs,epsilon,density=None,m=None,):
+def _rank2proba(rank_model,epsilon,density=None,m=None,):
+
+    sorted_pairs=rank_model.sortedPairs
     if density==None:
         if m==None:
             raise Exception("You must specify either a density or a number of edges")
         else:
             density=m/len(sorted_pairs)
     
-    det_function=relative_rank2proba_bezier(density,epsilon)
+    det_function=_relative_rank2proba_bezier(density,epsilon)
     probas=[]
     for i in range(len(sorted_pairs)):
         fraction_edges_in_bin = det_function(i / len(sorted_pairs))
@@ -85,7 +48,7 @@ def rank2proba(sorted_pairs,epsilon,density=None,m=None,):
         probas.append(proba)
     return probas
 
-def relative_rank2proba_bezier(density, epsilon, nb_bins=100, plot=False):
+def _relative_rank2proba_bezier(density, epsilon, nb_bins=100, plot=False):
     if epsilon<0 or epsilon>1:
         raise Exception("weight must be between 0 and 1")
     # possible_edges=nb_nodes*(nb_nodes-1)/2

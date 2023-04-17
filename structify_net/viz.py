@@ -3,16 +3,15 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import math
 
-
-def plot_rank_matrix(nodePair_order,nodeOrder=None,ax=None):
+def _plot_rank_matrix(rank_model,nodeOrder=None,ax=None):
     """
     Plot a matrix of the graph, ordered by nodePair_order
     graph: a networkx graph
     nodePair_order: a list of node pairs, from the most likely to the less likely
     nodeOrder: a list of nodes, ordered by the order in which they should appear in the matrix
     """
+    nodePair_order=rank_model.sortedPairs
     if nodeOrder!=None:
-        #nodeOrder=g.nodes
         n=len(nodeOrder)
     else:
         n=len(set([n for e in nodePair_order for n in e]))
@@ -51,11 +50,9 @@ def plot_adjacency_matrix(g,nodeOrder=None):
 
     return m
 
-def plot_proba_function(probas,ax=None):
-    """
-    Plot the probability function of the graph
-    probas: a list of probabilities, ordered by the order in which the edges should appear in the graph
-    """
+def _plot_proba_function(generator,ax=None):
+
+    probas = generator.probas
     #res = sns.lineplot(x=range(len(probas)),y=sorted(probas,reverse=True))
     if ax==None:
         fig,ax=plt.subplots()
@@ -66,7 +63,7 @@ def plot_proba_function(probas,ax=None):
     return res 
 
 
-def get_palette(nb_colors):
+def _get_palette(nb_colors):
     """
     Get a palette of nb_colors colors
     """
@@ -77,13 +74,17 @@ def spider_plot(df,categories=None,reference=None):
     each_spider=(340,360)
     df=df.copy()
     if "epsilon" in df.columns:
-        df["name"]=df["name"]+"($\epsilon$="+df["epsilon"].round(4).astype(str)+")"
-        df.drop(columns=["epsilon"],inplace=True)
+        df.rename(columns={"epsilon":"$\epsilon$"},inplace=True)
+    if "$\epsilon$" in df.columns:
+        df["name"]=df["name"]+"($\epsilon$="+df["$\epsilon$"].round(4).astype(str)+")"
+        df.drop(columns=["$\epsilon$"],inplace=True)
     df.reset_index(inplace=True)
     names=list(df["name"])
+    
     df.drop(columns=["index","name"],inplace=True) 
     if categories==None:
         categories=list(df)
+    
     
     if isinstance(reference,int):
         reference=df.loc[reference][categories].values.flatten().tolist()
@@ -100,7 +101,7 @@ def spider_plot(df,categories=None,reference=None):
         if len(df)==1:
             axs=np.array([axs])
     axs_flatten=axs.flatten()
-    colors= get_palette(len(df.index))
+    colors= _get_palette(len(df.index))
     
     for row in range(0, len(df.index)):
         values=df.loc[row][categories].values.flatten().tolist()
@@ -113,7 +114,7 @@ def spider_plot(df,categories=None,reference=None):
 
 pi=3.14159
 
-def model_evolution(df):
+def _model_evolution(df):
     df=df.copy()
     df.reset_index(inplace=True)
     df.drop(columns=["index"],inplace=True) 
@@ -125,6 +126,9 @@ def _make_spider(values,  categories, title="", color="green",fill=True,ax=None,
 
     # number of variable
     #categories=list(df)[1:]
+    categories=categories.copy()
+    categories= [cat.replace("$$", "$") for cat in categories]
+
     N = len(categories)
     if isinstance(values,np.ndarray):
         values=values.tolist()
