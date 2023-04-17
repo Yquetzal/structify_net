@@ -32,10 +32,12 @@ def _plot_rank_matrix(rank_model,nodeOrder=None,ax=None):
     return m
 
 def plot_adjacency_matrix(g,nodeOrder=None):
-    """
-    Plot a matrix of the graph, ordered by nodePair_order
-    graph: a networkx graph
-    nodeOrder: a list of nodes, ordered by the order in which they should appear in the matrix
+    """Plot a matrix of the graph
+
+    Parameters
+        g: a networkx graph
+        nodeOrder: a list of nodes, ordered by the order in which they should appear in the matrix
+        
     """
     n=len(g.nodes)
     if nodeOrder==None:
@@ -71,6 +73,15 @@ def _get_palette(nb_colors):
     return _my_pallete
 
 def spider_plot(df,categories=None,reference=None):
+    """Plot a spider plot for each row of df
+
+    This plot is used to compare the performance of different models on different scoring functions.
+    
+    Args:
+        df (_type_): The dataframe to plot. Each row is a spider plot. The first column is the name of the spider plot. The other columns are the scoring functions to plot.
+        categories (_type_, optional): A list of the scoring functions to plot. Defaults to None, in which case all the columns are plotted.
+        reference (_type_, optional): Which line to use as a reference. Defaults to None, in which case no reference is plotted
+    """
     each_spider=(340,360)
     df=df.copy()
     if "epsilon" in df.columns:

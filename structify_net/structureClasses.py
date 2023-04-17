@@ -8,7 +8,14 @@ import structify_net.transform as transform
 
 
 class Graph_generator:
-    """A class to generate graphs from a rank model and a probability function
+    """A graph generator
+    
+    This class instantiate graph generators. It is composed of a Rank Model Class, and a list of probabilites, such as the index of the probability in the list corresponds to the index of the edge in the rank model. 
+    
+    Attributes:
+        rank_model (_type_): A rank model
+        sortedPairs (_type_): the node pairs, sorted from the most likely to the least likely to be connected, same as in the rank model
+        probas (_type_): the probabilities of observing an edge, one for each edge, sorted in the same probability as the sortedPairs
     """
     def __init__(self, rank_model, probas):
         """Create a graph generator
@@ -68,10 +75,19 @@ class Graph_generator:
         return stn.scores_for_generators(self,scores=scores,runs=runs,details=details,latex_names=latex_names)
 
 class Rank_model:
+    """A class to represent a rank model
+    
+    A rank model is composed of a list of node pairs, ordered such as the first ones are the most likely to be connected. It can also contain node properties, and a node order, which is the order in which the nodes should be plotted in a plot matrix. It can return a graph generator(provided a proper probability function), which can be used to generate graphs based on this rank model.
+    
+    Node properties are useful to match the edge order with the structure, it can be used to store the spatial position of nodes or the community membership of nodes, for example.
+    
+    Attributes:
+        sortedPairs (_type_): A list of node pairs, ordered such as the first ones are the most likely to be connected
+        node_properties (_type_, optional): node properties provided as networkx graph or dictionary. Defaults to None.
+        node_order (_type_, optional): The order in which the nodes should be plotted in a plot matrix. Defaults to None.
+    """
     def __init__(self, sortedPairs, node_properties=None,node_order=None):
-        """A class to represent a rank model
-        A rank model is composed of a list of node pairs, ordered such as the first ones are the most likely to be connected
-
+        """ Initialize a rank model
         Args:
             sortedPairs (_type_):  A list of node pairs, ordered such as the first ones are the most likely to be connected
             node_properties (_type_, optional): node properties provided as networkx graph or dictionary. Defaults to None.

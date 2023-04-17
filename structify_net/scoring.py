@@ -332,7 +332,8 @@ def compute_all_scores(graph):
         graph (_type_): A graph
     
     Returns:
-        _type_: A dictionary with the scores
+        :class:`pd.DataFrame`: A dictionary with the scores
+        
     """
     to_return = {}
     for name,func in all_scores.items():
@@ -363,6 +364,7 @@ def scores_for_graphs(graphs,scores=None,latex_names=True):
         df.columns=cols
     return(df)
 global_name = ""
+
 def scores_for_generators(generators,scores=None,runs=1,details=False,latex_names=True):
     """Scores for a list of generators
 

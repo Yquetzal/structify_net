@@ -27,7 +27,7 @@ def sort_ER(nodes):
         nodes (_type_): describe nodes of the graphs, either as a networkx graph (node names and node attributes are preserved) or an integer (number of nodes)
 
     Returns:
-        Rank_model: The corresponding rank model
+        :class:`structify_net.Rank_model`:: The corresponding rank model
     """
     if not isinstance(nodes,nx.Graph):
         g=_n_to_graph(nodes)
@@ -51,6 +51,9 @@ def ER_generator(n,m=None,p=None):
 
     Raises:
         ValueError: _description_
+        
+    Returns:
+        :class:`structify_net.Graph_generator`:: The corresponding graph generator
     """
     if m==None and p==None:
         raise ValueError("Either m or p must be specified")
@@ -100,7 +103,7 @@ def sort_distances(nodes,dimensions=1,distance=euclidean):
         distance (_type_, optional): distance function. Defaults to euclidean.
 
     Returns:
-        _type_: The corresponding rank model
+        :class:`structify_net.Rank_model`:: The corresponding rank model
     """
     if not isinstance(nodes,nx.Graph):
         g=_n_to_graph(nodes)
@@ -133,7 +136,7 @@ def sort_blocks_assortative(nodes,blocks=None):
         blocks (_type_, optional): Blocks definition. Can be either a list of lists, where each list is a block, or an integer, in which case the nodes are randomly assigned to the corresponding number of equal size blocks. Defaults to None.
 
     Returns:
-        _type_: The corresponding rank model
+        :class:`structify_net.Rank_model`: The corresponding rank model
     """
     if not isinstance(nodes,nx.Graph):
         g=_n_to_graph(nodes)
@@ -166,12 +169,13 @@ def sort_overlap_communities(nodes,blocks=None):
     """Rank model based on overlapping communities
 
     This rank model is based on overlapping communities. The communities are defined by the blocks argument. It can be either a list of lists, where each list is a community, or an integer corresponding to the number of communities. In the latter case, each node corresponds to two communities, and the affiliations are chosen such as each community has half of its nodes shared with another community c1 and the other half shared with another community c2.
+    
     Args:
         nodes (_type_): Describe nodes of the graphs, either as a networkx graph (node names and node attributes are preserved) or an integer (number of nodes)
         blocks (_type_, optional): Describe communities. Can be either a list of lists, where each list is a community, or an integer. Defaults to None.
 
     Returns:
-        _type_: A rank model
+        :class:`structify_net.Rank_model`:: A rank model
     """
     if not isinstance(nodes,nx.Graph):
         g=_n_to_graph(nodes)
@@ -220,12 +224,13 @@ def sort_largest_disconnected_cliques(nodes,m):
     """A rank model based on the largest disconnected cliques
 
     Computes the largest possible number of cliques of size k such that the number of edges is less than m. Then, the rank model is the same as for assortative blocks.
+    
     Args:
         nodes (_type_): Nodes of the graph, either as a networkx graph (node names and node attributes are preserved) or an integer (number of nodes)
         m (_type_): number of edges. This is required to compute the largest possible number of cliques.
 
     Returns:
-        _type_: _description_
+        :class:`structify_net.Rank_model`:: _description_
     """
     if not isinstance(nodes,nx.Graph):
         g=_n_to_graph(nodes)
@@ -259,7 +264,7 @@ def sort_stars(nodes):
         nodes (_type_): Describe nodes. Can be either a networkx graph (node names and node attributes are preserved) or an integer (number of nodes)
 
     Returns:
-        _type_: The rank model
+        :class:`structify_net.Rank_model`:: The rank model
     """
     if not isinstance(nodes,nx.Graph):
         g=_n_to_graph(nodes)
@@ -282,7 +287,7 @@ def sort_core_distance(nodes,dimensions=1,distance=euclidean):
         distance (_type_, optional): Distance function. Defaults to euclidean.
 
     Returns:
-        _type_: The rank model
+        :class:`structify_net.Rank_model`:: The rank model
     """
     if not isinstance(nodes,nx.Graph):
         g=_n_to_graph(nodes)
@@ -312,7 +317,7 @@ def sort_spatial_WS(nodes,k=10):
         k (int, optional): Number of nearest neighbors. Defaults to 10.
 
     Returns:
-        _type_: The rank model
+        :class:`structify_net.Rank_model`:: The rank model
     """
     if not isinstance(nodes,nx.Graph):
         g=_n_to_graph(nodes)
@@ -338,7 +343,7 @@ def sort_fractal_leaves(nodes,d=2):
         d (int, optional): Degree of the binary tree. Defaults to 2.
 
     Returns:
-        _type_: A rank model
+        :class:`structify_net.Rank_model`:: A rank model
     """
     if not isinstance(nodes,nx.Graph):
         g=_n_to_graph(nodes)
@@ -368,7 +373,7 @@ def sort_fractal_root(nodes,d=2):
         d (int, optional): degree of the binary tree. Defaults to 2.
 
     Returns:
-        _type_: The rank model
+        :class:`structify_net.Rank_model`:: The rank model
     """
     if not isinstance(nodes,nx.Graph):
         g=_n_to_graph(nodes)
@@ -396,7 +401,7 @@ def sort_nestedness(nodes):
         nodes (_type_): Describe nodes. Can be either a networkx graph (node names and node attributes are preserved) or an integer (number of nodes)
 
     Returns:
-        _type_: The rank model
+        :class:`structify_net.Rank_model`:: The rank model
     """
     if not isinstance(nodes,nx.Graph):
         g=_n_to_graph(nodes)
@@ -417,7 +422,7 @@ def sort_fractal_hierarchical(nodes,d=3):
         d (int, optional): degree of the binary tree. Defaults to 3. 3 allows to have many triangles.
 
     Returns:
-        _type_: The rank model
+        :class:`structify_net.Rank_model`:: The rank model
     """
     if not isinstance(nodes,nx.Graph):
         g=_n_to_graph(nodes)
@@ -459,7 +464,7 @@ def sort_fractal_star(nodes,d=2):
         d (int, optional): degree of the binary tree. Defaults to 2.
 
     Returns:
-        _type_: _description_
+        :class:`structify_net.Rank_model`:: _description_
     """
     if not isinstance(nodes,nx.Graph):
         g=_n_to_graph(nodes)
@@ -513,7 +518,7 @@ def get_all_rank_models(n,m):
         m (_type_): number of edges. Only used for models with a parameter m
 
     Returns:
-        _type_: _description_
+        Dictionary of rank models {name:rank_model}
     """
     to_return = {name:f(n) for name,f in all_models_no_param.items()}
     to_return = to_return|{name:f(n,m) for name,f in all_models_with_m.items()}
