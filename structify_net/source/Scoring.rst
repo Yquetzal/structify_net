@@ -25,7 +25,16 @@ Individual scoring functions
    scoring.has_giant_component
    scoring.giant_component_ratio
    scoring.transitivity
-
+   scoring.average_clustering
+   scoring.average_shortest_path_length
+   scoring.modularity
+   scoring.degree_heterogeneity
+   scoring.is_degree_heterogeneous
+   scoring.robustness
+   scoring.degree_assortativity
+   scoring.hierarchy
+   scoring.boundaries
+   scoring.coreness
 
 Useful functions
 ----------------

@@ -34,7 +34,6 @@ This library also contains a set of tools to visualize and score the resulting n
    Classes
    Zoo
    Visualization
-   Scoring
-   Tutorial/Tutorial
+
 
 
