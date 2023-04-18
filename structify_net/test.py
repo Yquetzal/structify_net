@@ -1,5 +1,4 @@
 import numpy as np
-import structify_net as stn
 import networkx as nx
 
 
