@@ -16,15 +16,15 @@ import sys
 sys.path.insert(0, os.path.abspath('..'))
 sys.path.insert(0, os.path.abspath('../structify_net'))
 
-from mock import Mock as MagicMock
+# from mock import Mock as MagicMock
 
-class Mock(MagicMock):
-    @classmethod
-    def __getattr__(cls, name):
-        return MagicMock()
+# class Mock(MagicMock):
+#     @classmethod
+#     def __getattr__(cls, name):
+#         return MagicMock()
     
-MOCK_MODULES = ['numpy', 'scipy', 'matplotlib', 'matplotlib.pyplot', 'scipy.interpolate',"seaborn","pandas","scipy.special","scipy.spatial"]
-sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
+# MOCK_MODULES = ['numpy', 'scipy', 'matplotlib', 'matplotlib.pyplot', 'scipy.interpolate',"seaborn","pandas","scipy.special","scipy.spatial"]
+# sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 
 # -- General configuration ---------------------------------------------------
