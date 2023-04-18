@@ -23,7 +23,7 @@ def giant_component_ratio(graph):
     Returns:
         _type_: _description_
     """
-    nb_nodes=graph.number_of_nodes()
-    largest_CC= len(max(nx.connected_components(graph), key=len))
-    ratio_CC=largest_CC/nb_nodes
-    return ratio_CC
+    #nb_nodes=graph.number_of_nodes()
+    #largest_CC= len(max(nx.connected_components(graph), key=len))
+    #ratio_CC=largest_CC/nb_nodes
+    return graph
