@@ -9,7 +9,7 @@
 project = 'structify_net'
 copyright = '2023, Rémy Cazabet'
 author = 'Rémy Cazabet'
-release = '0.1'
+release = '2'
 
 import os
 import sys

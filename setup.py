@@ -40,7 +40,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 
 setup(name='structify_net',
-      version='1.1',
+      version='2',
       license='BSD-Clause-2',
       description='Network Generation with controlled structure',
       url='https://github.com/Yquetzal/structify_net',
