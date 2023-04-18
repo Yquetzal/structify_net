@@ -18,7 +18,7 @@ version: 2
 #sphinx:
 #   configuration: source/conf.py
 sphinx:
-   configuration: docs/conf.py
+   configuration: docs/source/conf.py
 # If using Sphinx, optionally build your docs in additional formats such as PDF
 # formats:
 #    - pdf
