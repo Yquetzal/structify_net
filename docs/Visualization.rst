@@ -16,8 +16,8 @@ The visualization submodule (:mod:`structify_net.viz`) contains also functions t
 Individual models
 -----------------
 
-.. .. autosummary::
-..    :toctree: generated/
+.. autosummary::
+   :toctree: generated/
 
-..     viz.plot_adjacency_matrix
-..     viz.spider_plot
+    viz.plot_adjacency_matrix
+    viz.spider_plot
