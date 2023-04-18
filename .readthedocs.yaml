@@ -6,17 +6,17 @@
 version: 2
 
 # Set the version of Python and other tools you might need
-build:
-  tools:
-    python: "3"
+#build:
+#  tools:
+#    python: "3"
     # You can also specify other tool versions:
     # nodejs: "19"
     # rust: "1.64"
     # golang: "1.19"
 
 # Build documentation in the docs/ directory with Sphinx
-sphinx:
-   configuration: source/conf.py
+#sphinx:
+#   configuration: source/conf.py
 
 # If using Sphinx, optionally build your docs in additional formats such as PDF
 # formats:
