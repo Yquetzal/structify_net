@@ -24,6 +24,7 @@ class Mock(MagicMock):
         return MagicMock()
     
 MOCK_MODULES = ['numpy', 'scipy', 'matplotlib', 'matplotlib.pyplot', 'scipy.interpolate',"seaborn","pandas","scipy.special","scipy.spatial","tqdm","tqdm.auto","networkx","math","numbers","random"]
+
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 
