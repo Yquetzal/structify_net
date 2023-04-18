@@ -1,7 +1,8 @@
 import math
 import networkx as nx
 import numpy as np
-from scipy.stats import spearmanr
+import scipy
+#from scipy.stats import spearmanr
 import pandas as pd
 import structify_net as stn
 #from structify_net.structureClasses import Rank_model, Graph_generator
@@ -248,7 +249,7 @@ def hierarchy(graph,normalized=False,positive_only=True):
             if clusterings[i]!=clusterings[0]:
                 constant_clustering=False
             if not constant_degrees and not constant_clustering:
-                hierarchical=-spearmanr(degrees,clusterings).correlation
+                hierarchical=-scipy.stats.spearmanr(degrees,clusterings).correlation
                 break
             
         if np.isnan(hierarchical):

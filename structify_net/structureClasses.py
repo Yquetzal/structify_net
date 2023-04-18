@@ -1,6 +1,6 @@
 import itertools
 import numpy as np
-from scipy.special import comb
+import scipy.special
 import networkx as nx
 import structify_net.viz as viz
 import structify_net.scoring as scoring
@@ -47,7 +47,7 @@ class Graph_generator:
         Returns:
             nx.Graph: a graph
         """
-        return transform._proba2graph(list(itertools.combinations(range(n),2)), [p]*comb(n,2,exact=True))
+        return transform._proba2graph(list(itertools.combinations(range(n),2)), [p]*scipy.special.comb(n,2,exact=True))
     
     def plot_proba_function(self,ax=None):
         """Plot the probability function
