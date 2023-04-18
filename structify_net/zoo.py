@@ -107,7 +107,7 @@ def sort_distances(nodes,dimensions=1,distance="euclidean"):
     """
     
     if distance=="euclidean":
-        distance = scipy.spatial.distance
+        distance = scipy.spatial.distance.euclidean
     if not isinstance(nodes,nx.Graph):
         g=_n_to_graph(nodes)
     else:
@@ -123,7 +123,7 @@ def sort_distances(nodes,dimensions=1,distance="euclidean"):
 
     sorted_pairs=[e[0] for e in sorted_pairs]
     node_order = sorted(nx.get_node_attributes(g,"d1").items(), key=lambda e: e[1],reverse=False)
-    return Rank_model(sorted_pairs, g,node_order=[e[0] for e in node_order])
+    return stn.Rank_model(sorted_pairs, g,node_order=[e[0] for e in node_order])
 
 #Defining assortative blocks/communities. 
 #Be carefull that pairs are ordered both inside and outside blocks (favor low number nodes)
@@ -163,7 +163,7 @@ def sort_blocks_assortative(nodes,blocks=None):
     sorted_pairs=[e[0] for e in sorted_pairs]
 
     node_order = sorted(nx.get_node_attributes(g,"block1").items(), key=lambda e: e[1],reverse=False)
-    return Rank_model(sorted_pairs, g,node_order=[e[0] for e in node_order])
+    return stn.Rank_model(sorted_pairs, g,node_order=[e[0] for e in node_order])
 
 def _flatten(l):
     return [item for sublist in l for item in sublist]
@@ -219,7 +219,7 @@ def sort_overlap_communities(nodes,blocks=None):
     sorted_pairs=[e[0] for e in sorted_pairs]
 
     node_order = sorted(nx.get_node_attributes(g,"block1").items(), key=lambda e: e[1],reverse=False)
-    return Rank_model(sorted_pairs, g,node_order=[e[0] for e in node_order])
+    return stn.Rank_model(sorted_pairs, g,node_order=[e[0] for e in node_order])
 
 #Defining assortative blocks/communities. 
 #Be carefull that pairs are ordered both inside and outside blocks (favor low number nodes)
@@ -252,7 +252,7 @@ def sort_largest_disconnected_cliques(nodes,m):
     blocks={i:affil[i] for i in range(n)}
     sorted_pairs={(u,v): 2+random.random() if blocks[u]==blocks[v] else 0+random.random() for u,v in sorted_pairs}
     sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=True)
-    return Rank_model([e[0] for e in sorted_pairs], g)
+    return stn.Rank_model([e[0] for e in sorted_pairs], g)
 
 #Defining a degree heterogeneous network. Pairs of nodes are sorted such as all pairs of nodes of node n1 are first,
 # then all pairs of nodes of node n2, etc. The strongest structure corresponds to a star structure: a few nodes
@@ -275,7 +275,7 @@ def sort_stars(nodes):
         g=nodes
 
     sorted_pairs=itertools.combinations(g.nodes,2)
-    return Rank_model(list(sorted_pairs), g)
+    return stn.Rank_model(list(sorted_pairs), g)
 
 # A proposition of a (continuous) core-periphery organization. Pairs of nodes are sorted according to the sum 
 # of the distance of their nodes to the center of the space.
@@ -312,7 +312,7 @@ def sort_core_distance(nodes,dimensions=1,distance="euclidean"):
     sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=False)
     sorted_pairs=[e[0] for e in sorted_pairs]
     node_order = sorted(nx.get_node_attributes(g,"d1").items(), key=lambda e: e[1],reverse=False)
-    return Rank_model(sorted_pairs, g,[e[0] for e in node_order])
+    return stn.Rank_model(sorted_pairs, g,[e[0] for e in node_order])
 
 def sort_spatial_WS(nodes,k=10):
     """Rank model based on a spatial Watts-Strogatz model
@@ -338,7 +338,7 @@ def sort_spatial_WS(nodes,k=10):
         return 2+random.random()
     sorted_pairs={(u,v):my_dist(u,v) for u,v in sorted_pairs}
     sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=False)
-    return Rank_model([e[0] for e in sorted_pairs], g)
+    return stn.Rank_model([e[0] for e in sorted_pairs], g)
 
 def sort_fractal_leaves(nodes,d=2):
     """A rank model based on a fractal structure
@@ -368,7 +368,7 @@ def sort_fractal_leaves(nodes,d=2):
     #print(all_distances)
     sorted_pairs = {(u,v):all_distances["temp_"+str(u)]["temp_"+str(v)]+random.random()/10 for (u,v) in pairs}
     sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=False)
-    return Rank_model([e[0] for e in sorted_pairs], g)
+    return stn.Rank_model([e[0] for e in sorted_pairs], g)
 
 def sort_fractal_root(nodes,d=2):
     """A rank model based on a fractal structure
@@ -397,7 +397,7 @@ def sort_fractal_root(nodes,d=2):
     all_distances = {x:v for x,v in nx.all_pairs_shortest_path_length(binary_tree)}
     sorted_pairs = {(u,v):all_distances["temp_"+str(u)]["temp_"+str(v)]+random.random()/10 for (u,v) in pairs}
     sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=False)
-    return Rank_model([e[0] for e in sorted_pairs], g)
+    return stn.Rank_model([e[0] for e in sorted_pairs], g)
 
 def sort_nestedness(nodes):
     """Rank model based on nestedness
@@ -417,7 +417,7 @@ def sort_nestedness(nodes):
 
     sorted_pairs=itertools.combinations(g.nodes,2)
     sorted_pairs = sorted(list(sorted_pairs),key=lambda x: x[0]+x[1])
-    return Rank_model(sorted_pairs, g)
+    return stn.Rank_model(sorted_pairs, g)
 
 def sort_fractal_hierarchical(nodes,d=3):
     """Rank model based on a fractal structure
@@ -459,7 +459,7 @@ def sort_fractal_hierarchical(nodes,d=3):
                                                                   
     sorted_pairs = {(u,v):child_score(u,v) if child_of(u,v) else family_score(u,v) for (u,v) in pairs}
     sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=False)
-    return Rank_model([e[0] for e in sorted_pairs], g)
+    return stn.Rank_model([e[0] for e in sorted_pairs], g)
 
 def sort_fractal_star(nodes,d=2):
     """A rank model based on a fractal structure
@@ -490,7 +490,7 @@ def sort_fractal_star(nodes,d=2):
     heights = nx.shortest_path_length(binary_tree,"temp_"+str(0))
     sorted_pairs = {(u,v):-abs(heights["temp_"+str(u)]-heights["temp_"+str(v)])+random.random()/1000 for (u,v) in pairs}
     sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=False)
-    return Rank_model([e[0] for e in sorted_pairs], g)
+    return stn.Rank_model([e[0] for e in sorted_pairs], g)
 
 # def sort_smallWorldTrick(nodes):
 #     if not isinstance(nodes,nx.Graph):
