@@ -6,7 +6,7 @@ Structure Zoo
 
 The structure zoo is a collection of structures. It contains both classic ones such as bloc structures, spatial structures or Watts-Strogatz structures, and less common ones. The zoo is a good place to start if you want to learn about the different types of structures that can be created with the library.
 
-The scoring function are defined in the :mod:`structify_net.zoo` submodule.
+The scoring function are defined in the :mod:`zoo` submodule.
 There are some useful shortcuts to get collection of structures from the zoo.
 
 - :data:`zoo.all_models_no_param`: contains all the model functions that do not require any parameter.
