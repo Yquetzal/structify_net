@@ -1,4 +1,5 @@
 import scipy
+import scipy.spatial
 import itertools
 import random
 import math
