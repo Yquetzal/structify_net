@@ -329,6 +329,62 @@ def coreness(graph,normalized=True):
 
 
 
+
+
+
+
+def compute_all_scores(graph):
+    """Compute all scores for a graph
+    
+    Args:
+        graph (_type_): A graph
+    
+    Returns:
+        :class:`pd.DataFrame`: A dictionary with the scores
+        
+    """
+    to_return = {}
+    for name,func in default_scores.items():
+        to_return[name]=func(graph)
+    return to_return
+
+def scores_for_graphs(graphs,scores=None,latex_names=True):
+    """Compute scores for a list of graphs
+
+    Args:
+        graphs (_type_): A dictionary of graphs such as {name:graph}
+        scores (_type_, optional): A dictionary of scores such as {name:score}. Defaults to None.
+        latex_names (bool, optional): If True, the names of the scores are latex formulas. Defaults to True.
+    """
+    records=[]
+    if scores is None:
+        scores = get_default_scores()
+    for graph_name,graph in graphs.items():
+        line=[]
+        for score_name,func in scores.items():
+            line.append(func(graph))
+        records.append([graph_name]+line)
+    
+    df = pd.DataFrame(records,columns=["name"]+list(scores.keys()))
+    if latex_names:
+        cols=df.columns
+        cols=_names2latex_list(cols)
+        df.columns=cols
+    return(df)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def compare_graphs(df_reference,df_graphs,best_by_name=False,score_difference=False):
     """Compares a list of graphs to a reference graph
     
