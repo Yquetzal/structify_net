@@ -291,3 +291,221 @@ def sort_stars(nodes):
     sorted_pairs=itertools.combinations(g.nodes,2)
     return stn.Rank_model(list(sorted_pairs), g)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# A proposition of a (continuous) core-periphery organization. Pairs of nodes are sorted according to the sum 
+# of the distance of their nodes to the center of the space.
+def sort_core_distance(nodes,dimensions=1,distance="euclidean"):
+    """Rank model based on the sum of the distance of their nodes to the center of the space.
+    
+    This is a proposition of a (continuous) core-periphery organization. Pairs of nodes are sorted according to the sum of the distance of their nodes to the center of the space.
+
+    Args:
+        nodes (_type_): Describe nodes. Can be either a networkx graph (node names and node attributes are preserved) or an integer (number of nodes)
+        dimensions (int, optional): Number of dimensions. Defaults to 1.
+        distance (_type_, optional): Distance function. Defaults to euclidean.
+
+    Returns:
+        :class:`structify_net.Rank_model`:: The rank model
+    """
+    
+    if distance=="euclidean":
+        distance=scipy.spatial.distance.euclidean
+    
+    if not isinstance(nodes,nx.Graph):
+        g=_n_to_graph(nodes)
+    else:
+        g=nodes
+    if isinstance(dimensions,int):
+        g = _assign_ordinal_attributes(len(g.nodes),dimensions)
+        dimensions=["d"+str(i_dim+1) for i_dim in range(dimensions)]
+
+    sorted_pairs=itertools.combinations(g.nodes,2)
+    positions={n:[g.nodes[n][d] for d in dimensions] for n in g.nodes}
+    def core_distance(u,v):
+        return distance(positions[u],[0.5]*len(dimensions))*distance(positions[v],[0.5]*len(dimensions))
+    sorted_pairs={(u,v):core_distance(u,v) for u,v in sorted_pairs}
+    sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=False)
+    sorted_pairs=[e[0] for e in sorted_pairs]
+    node_order = sorted(nx.get_node_attributes(g,"d1").items(), key=lambda e: e[1],reverse=False)
+    return stn.Rank_model(sorted_pairs, g,[e[0] for e in node_order])
+
+def sort_spatial_WS(nodes,k=10):
+    """Rank model based on a spatial Watts-Strogatz model
+    
+    This rank model reproduce the original Watts-Strogatz model. Each node is connected to its k nearest neighbors in a ring topology.
+
+    Args:
+        nodes (_type_): A networkx graph (node names and node attributes are preserved) or an integer (number of nodes)
+        k (int, optional): Number of nearest neighbors. Defaults to 10.
+
+    Returns:
+        :class:`structify_net.Rank_model`:: The rank model
+    """
+    if not isinstance(nodes,nx.Graph):
+        g=_n_to_graph(nodes)
+    else:
+        g=nodes
+
+    sorted_pairs=itertools.combinations(g.nodes,2)
+    def my_dist(u,v):
+        if ((v-u)%(len(g.nodes)-(k/2))<=k/2):
+            return 0+random.random()
+        return 2+random.random()
+    sorted_pairs={(u,v):my_dist(u,v) for u,v in sorted_pairs}
+    sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=False)
+    return stn.Rank_model([e[0] for e in sorted_pairs], g)
+
+def sort_fractal_leaves(nodes,d=2):
+    """A rank model based on a fractal structure
+    
+    The order of the pairs is based on the distance between the leaves of a binary tree. The number of leaves is the number of nodes in the network. The distance between two leaves is the number of edges between them in the binary tree.
+
+    Args:
+        nodes (_type_): Describe nodes. Can be either a networkx graph (node names and node attributes are preserved) or an integer (number of nodes)
+        d (int, optional): Degree of the binary tree. Defaults to 2.
+
+    Returns:
+        :class:`structify_net.Rank_model`:: A rank model
+    """
+    if not isinstance(nodes,nx.Graph):
+        g=_n_to_graph(nodes)
+    else:
+        g=nodes
+
+    nb_nodes=len(g.nodes)
+    height = math.ceil(math.log(nb_nodes, d))
+    binary_tree = nx.balanced_tree(d,height)
+    leaves_ids=list(binary_tree.nodes)[-nb_nodes:]
+    binary_tree = nx.relabel_nodes(binary_tree,{n:"temp_"+str(i) for i,n in enumerate(leaves_ids)})
+
+    pairs=itertools.combinations(g.nodes,2)
+    all_distances = {x:v for x,v in nx.all_pairs_shortest_path_length(binary_tree)}
+    #print(all_distances)
+    sorted_pairs = {(u,v):all_distances["temp_"+str(u)]["temp_"+str(v)]+random.random()/10 for (u,v) in pairs}
+    sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=False)
+    return stn.Rank_model([e[0] for e in sorted_pairs], g)
+
+def sort_fractal_root(nodes,d=2):
+    """A rank model based on a fractal structure
+    
+    The network is embedded in a binary tree. The order of the pairs is based on the distance between the nodes in the tree. Nodes are assigned starting from the root of the tree.
+
+    Args:
+        nodes (_type_): Describe nodes. Can be either a networkx graph (node names and node attributes are preserved) or an integer (number of nodes)
+        d (int, optional): degree of the binary tree. Defaults to 2.
+
+    Returns:
+        :class:`structify_net.Rank_model`:: The rank model
+    """
+    if not isinstance(nodes,nx.Graph):
+        g=_n_to_graph(nodes)
+    else:
+        g=nodes
+
+    nb_nodes=len(g.nodes)
+    height = math.ceil(math.log(nb_nodes, d)+1)
+    binary_tree = nx.balanced_tree(d,height-1)
+    leaves_ids=list(binary_tree.nodes)[:nb_nodes]
+    binary_tree = nx.relabel_nodes(binary_tree,{n:"temp_"+str(i) for i,n in enumerate(leaves_ids)})
+
+    pairs=itertools.combinations(g.nodes,2)
+    all_distances = {x:v for x,v in nx.all_pairs_shortest_path_length(binary_tree)}
+    sorted_pairs = {(u,v):all_distances["temp_"+str(u)]["temp_"+str(v)]+random.random()/10 for (u,v) in pairs}
+    sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=False)
+    return stn.Rank_model([e[0] for e in sorted_pairs], g)
+
+def sort_nestedness(nodes):
+    """Rank model based on nestedness
+    
+    A nestedness network is a particular type of network where the nodes are organized in a hierarchy. Top nodes are connected to bottom nodes. Bottom nodes are connected to other bottom nodes. The order of the pairs is based on the distance between the nodes in the hierarchy.
+
+    Args:
+        nodes (_type_): Describe nodes. Can be either a networkx graph (node names and node attributes are preserved) or an integer (number of nodes)
+
+    Returns:
+        :class:`structify_net.Rank_model`:: The rank model
+    """
+    if not isinstance(nodes,nx.Graph):
+        g=_n_to_graph(nodes)
+    else:
+        g=nodes
+
+    sorted_pairs=itertools.combinations(g.nodes,2)
+    sorted_pairs = sorted(list(sorted_pairs),key=lambda x: x[0]+x[1])
+    return stn.Rank_model(sorted_pairs, g)
+
+def sort_fractal_hierarchical(nodes,d=3):
+    """Rank model based on a fractal structure
+    
+    This structure is designed to maximize the hierarchical structure of the network. The network is embedded in a binary tree. The order of the pairs is based on two factors: the distance between nodes in the tree at a same hierarchical level and the distance between the hierarchical levels.
+
+    Args:
+        nodes (_type_): Describe nodes. Can be either a networkx graph (node names and node attributes are preserved) or an integer (number of nodes)
+        d (int, optional): degree of the binary tree. Defaults to 3. 3 allows to have many triangles.
+
+    Returns:
+        :class:`structify_net.Rank_model`:: The rank model
+    """
+    if not isinstance(nodes,nx.Graph):
+        g=_n_to_graph(nodes)
+    else:
+        g=nodes
+
+    nb_nodes=len(g.nodes)
+    height = math.ceil(math.log(nb_nodes, d)+1)
+    binary_tree = nx.balanced_tree(d,height-1)
+    leaves_ids=list(binary_tree.nodes)[:nb_nodes]
+    binary_tree = nx.relabel_nodes(binary_tree,{n:"temp_"+str(i) for i,n in enumerate(leaves_ids)})
+
+    pairs=itertools.combinations(g.nodes,2)
+    all_distances = {x:v for x,v in nx.all_pairs_shortest_path_length(binary_tree) }
+    #degrees = {k:v for k,v in binary_tree.degree}
+    heights = nx.shortest_path_length(binary_tree,"temp_"+str(0))
+    
+    def child_of(u,v):
+        return all_distances["temp_"+str(u)]["temp_"+str(v)]==abs(heights["temp_"+str(u)]-heights["temp_"+str(v)])
+    
+    def child_score(u,v):
+        #return height-max(heights["temp_"+str(u)],heights["temp_"+str(v)])
+        return height-1-abs(heights["temp_"+str(u)]-heights["temp_"+str(v)])
+    
+    def family_score(u,v):
+        return (all_distances["temp_"+str(u)]["temp_"+str(v)]-2)*1000+height-1-max(heights["temp_"+str(u)],heights["temp_"+str(v)])#+child_score(u,v)
+                                                                  
+    sorted_pairs = {(u,v):child_score(u,v) if child_of(u,v) else family_score(u,v) for (u,v) in pairs}
+    sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=False)
+    return stn.Rank_model([e[0] for e in sorted_pairs], g)
+
