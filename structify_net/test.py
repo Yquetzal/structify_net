@@ -374,6 +374,29 @@ def scores_for_graphs(graphs,scores=None,latex_names=True):
 
 
 
+def scores_for_generators(generators,scores=None,runs=1,details=False,latex_names=True):
+    """Scores for a list of generators
+
+    Args:
+        generators (_type_): A dictionary of generators such as {name:generator}
+        scores (_type_, optional): a dictionary of scores such as {name:score}. Defaults to None.
+        runs (int, optional): Number of runs. Defaults to 1.
+        details (bool, optional): If True, the results of each run are returned. Defaults to False.
+        latex_names (bool, optional): If True, the names of the scores are latex formulas. Defaults to True.
+
+    Returns:
+        _type_: _description_
+    """
+    to_return = pd.DataFrame()
+    for i in tqdm(range(runs),desc="Run",leave=False, position=0,):
+        graphs = {name:generator.generate() for name,generator in generators.items()}
+        results= scores_for_graphs(graphs,scores=scores,latex_names=latex_names)
+        to_return = pd.concat([to_return,results])
+        #scores["run"]=[i]*len(scores)
+    if details:
+        return to_return
+    to_return=to_return.groupby("name").mean().reset_index()
+    return to_return
 
 
 
