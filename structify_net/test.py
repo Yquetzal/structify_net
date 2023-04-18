@@ -401,6 +401,46 @@ def scores_for_generators(generators,scores=None,runs=1,details=False,latex_name
 
 
 
+def scores_for_rank_models(rank_models,m,scores=None,epsilons=0,runs=1,details=False,latex_names=True):
+    """Scores for a list of rank models
+
+    Args:
+        rank_models (_type_): A dictionary of rank models such as {name:rank_model}
+        m (_type_): Number of edges
+        scores (_type_, optional): A dictionary of scores such as {name:score}. Defaults to None.
+        epsilons (int, optional): A list of epsilons. Defaults to 0.
+        runs (int, optional): number of runs. Defaults to 1.
+        details (bool, optional): If True, the results of each run are returned. Defaults to False.
+        latex_names (bool, optional): IF True, the names of the scores are latex formulas. Defaults to True.
+
+    Returns:
+        _type_: dataframe with the scores
+    """
+    all_generators={}
+    if not isinstance(rank_models,dict):
+        rank_models = {"model":rank_models}
+    if isinstance(epsilons,numbers.Number):
+        if epsilons<=1:
+            epsilons=[epsilons]
+        else:
+            epsilons=[0]+list(np.logspace(-4,0,epsilons-1))
+    all_dfs=[]
+    for eps in (pbar := tqdm(epsilons, desc="Epsilon: ",position=0,leave=False)):
+    #for eps in epsilons:
+        pbar.set_description(f"Epsilon: {round(eps,4)}")
+        global_name="eps="+str(round(float(eps),4))+": "
+        for name,rank_model in rank_models.items():
+            all_generators[name]=rank_model.get_generator(eps,m=m)
+        df_alpha = scores_for_generators(all_generators,scores=scores,runs=runs,details=details,latex_names=latex_names)
+        df_alpha["epsilon"]=[eps]*len(df_alpha)
+        all_dfs.append(df_alpha)
+    all_alpha=pd.concat(all_dfs)
+    all_alpha.reset_index(inplace=True,drop=True)
+    
+    if latex_names:
+        all_alpha.rename({"epsilon":"$\\epsilon$"},axis=1,inplace=True)
+    return all_alpha
+
 
 
 
