@@ -336,7 +336,7 @@ def compute_all_scores(graph):
         
     """
     to_return = {}
-    for name,func in all_scores.items():
+    for name,func in default_scores.items():
         to_return[name]=func(graph)
     return to_return
 
