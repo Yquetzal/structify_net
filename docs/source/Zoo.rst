@@ -26,7 +26,7 @@ Individual models
    zoo.sort_distances
    zoo.sort_blocks_assortative
    zoo.sort_overlap_communities
-   zoo.ER_generator
+   structify_net.zoo.ER_generator
    zoo.sort_largest_disconnected_cliques
    zoo.sort_stars
    zoo.sort_core_distance
