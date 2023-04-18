@@ -464,7 +464,7 @@ def sort_fractal_star(nodes,d=2):
         d (int, optional): degree of the binary tree. Defaults to 2.
 
     Returns:
-        :class:`structify_net.Rank_model`:: _description_
+        :class:`structify_net.Rank_model`:: rank model
     """
     if not isinstance(nodes,nx.Graph):
         g=_n_to_graph(nodes)
