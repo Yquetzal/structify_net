@@ -588,3 +588,53 @@ def sort_fractal_star(nodes,d=2):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+all_models_no_param={"ER":sort_ER,"spatial":sort_distances,"spatialWS":sort_spatial_WS,"blocks_assortative":sort_blocks_assortative,"overlapping_communities":sort_overlap_communities,
+             "nestedness":sort_nestedness,"maximal_stars":sort_stars,"core_distance":sort_core_distance,"fractal_leaves":sort_fractal_leaves,
+             "fractal_root":sort_fractal_root,"fractal_hierarchy":sort_fractal_hierarchical,"fractal_star":sort_fractal_star}
+
+all_models_with_m={"disconnected_cliques":sort_largest_disconnected_cliques}
+all_models=all_models_no_param|all_models_with_m
+
+def get_all_rank_models(n,m):
+    """Returns a dictionary of all rank models
+
+    Args:
+        n (_type_): number of nodes
+        m (_type_): number of edges. Only used for models with a parameter m
+
+    Returns:
+        Dictionary of rank models {name:rank_model}
+    """
+    to_return = {name:f(n) for name,f in all_models_no_param.items()}
+    to_return = to_return|{name:f(n,m) for name,f in all_models_with_m.items()}
+    return to_return
+
+#def get_all_generators(n,m):
+#    to_return = {name:f(n).get_generator for name,f in all_models_no_param.items()}
+#    return to_return
