@@ -10,6 +10,7 @@ import numbers
 #from tqdm.auto import tqdm
 import tqdm
 
+
 def _largest_component(graph):
     Gcc = sorted(nx.connected_components(graph), key=len, reverse=True)
     G0 = graph.subgraph(Gcc[0])
@@ -43,3 +44,23 @@ def giant_component_ratio(graph):
     largest_CC= len(max(nx.connected_components(graph), key=len))
     ratio_CC=largest_CC/nb_nodes
     return ratio_CC
+
+def transitivity(graph):
+    """Transitivity of the graph
+    
+    Args:
+        graph (nx.Graph): A graph
+    """
+    return nx.transitivity(graph)
+
+def average_clustering(graph):
+    """Average clustering coefficient of the graph
+    
+    Args:
+        graph (nx.Graph): A graph
+    
+    Returns:
+        float: Average clustering coefficient, a number between 0 and 1
+    """
+    #print(graph.clustering())
+    return np.average([cc for n,cc in  nx.clustering(graph).items()])
