@@ -1,4 +1,4 @@
-from scipy.spatial.distance import euclidean
+import scipy
 import itertools
 import random
 import math
@@ -92,7 +92,7 @@ def _n_to_graph(n):
 #Spatial/Geometric network, homophily (Ordinal)
 #Nodes are ranked according to the euclidean distance between their attributes. 
 #Typically, 1Dimension for homophily, 2 for spatial.
-def sort_distances(nodes,dimensions=1,distance=euclidean):
+def sort_distances(nodes,dimensions=1,distance="euclidean"):
     """Rank model based on the distance between nodes
     
     Also called spatial or geometric network, this rank model is based on the distance between nodes. The distance is defined by the distance function, and the dimensions are defined by the attributes of the nodes.
@@ -105,6 +105,9 @@ def sort_distances(nodes,dimensions=1,distance=euclidean):
     Returns:
         :class:`structify_net.Rank_model`:: The corresponding rank model
     """
+    
+    if distance=="euclidean":
+        distance = scipy.spatial.distance
     if not isinstance(nodes,nx.Graph):
         g=_n_to_graph(nodes)
     else:
@@ -276,7 +279,7 @@ def sort_stars(nodes):
 
 # A proposition of a (continuous) core-periphery organization. Pairs of nodes are sorted according to the sum 
 # of the distance of their nodes to the center of the space.
-def sort_core_distance(nodes,dimensions=1,distance=euclidean):
+def sort_core_distance(nodes,dimensions=1,distance="euclidean"):
     """Rank model based on the sum of the distance of their nodes to the center of the space.
     
     This is a proposition of a (continuous) core-periphery organization. Pairs of nodes are sorted according to the sum of the distance of their nodes to the center of the space.
@@ -289,6 +292,10 @@ def sort_core_distance(nodes,dimensions=1,distance=euclidean):
     Returns:
         :class:`structify_net.Rank_model`:: The rank model
     """
+    
+    if distance=="euclidean":
+        distance=scipy.spatial.distance.euclidean
+    
     if not isinstance(nodes,nx.Graph):
         g=_n_to_graph(nodes)
     else:
