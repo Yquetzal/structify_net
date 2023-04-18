@@ -619,7 +619,7 @@ all_models_no_param={"ER":sort_ER,"spatial":sort_distances,"spatialWS":sort_spat
              "fractal_root":sort_fractal_root,"fractal_hierarchy":sort_fractal_hierarchical,"fractal_star":sort_fractal_star}
 
 all_models_with_m={"disconnected_cliques":sort_largest_disconnected_cliques}
-all_models=all_models_no_param.update(all_models_with_m)#|all_models_with_m
+all_models={ **all_models_no_param, **all_models_with_m }#|all_models_with_m
 
 def get_all_rank_models(n,m):
     """Returns a dictionary of all rank models

@@ -7,8 +7,8 @@ import pandas as pd
 import structify_net as stn
 #from structify_net.structureClasses import Rank_model, Graph_generator
 import numbers
-#from tqdm.auto import tqdm
-import tqdm
+from tqdm.auto import tqdm
+#import tqdm
 
 def _largest_component(graph):
     Gcc = sorted(nx.connected_components(graph), key=len, reverse=True)
