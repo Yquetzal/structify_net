@@ -416,6 +416,7 @@ def scores_for_rank_models(rank_models,m,scores=None,epsilons=0,runs=1,details=F
         else:
             epsilons=[0]+list(np.logspace(-4,0,epsilons-1))
     all_dfs=[]
+    
     pbar = tqdm(epsilons, desc="Epsilon: ",position=0,leave=False)
     for eps in pbar:
     #for eps in epsilons:
