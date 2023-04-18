@@ -539,14 +539,3 @@ def _names2latex(scores):
         else:
             to_return[k]=v
     return to_return
-
-default_scores = {"transitivity":transitivity,"average_clustering":average_clustering,"coreness":coreness,"average_shortest_path_length":average_shortest_path_length,"robustness":robustness,"giant_component_ratio":giant_component_ratio,"modularity":modularity,"boundaries":boundaries,"degree_heterogeneity":degree_heterogeneity,"degree_assortativity":degree_assortativity,"hierarchy":hierarchy}
-
-#default_scores = {"$CC(G)$":transitivity,"$\overline{(CC(u))}$":average_clustering,"Core":coreness,"$\overline{d}$":average_shortest_path_length,"Rob":robustness,
-#            "I":giant_component_ratio,"$Q$":modularity,"$Q_{bound}$":boundaries,
-#            "$\sigma(k)$":degree_heterogeneity,
-#            "${-(k-k)}$":lambda x: degree_assortativity(x,disassortativity=True),"${\propto(k,CC)}$":hierarchy}
-
-score_names={"transitivity":"$CC(G)$","average_clustering":"$\overline{CC(u)}$","coreness":"Core","average_shortest_path_length":"$\overline{d}$","robustness":"Rob","giant_component_ratio":"I","modularity":"$Q$","boundaries":"$Q_{bound}$","degree_heterogeneity":"$\sigma(k)$","degree_assortativity":"$$-(k \propto k)$$","hierarchy":"$${k \propto CC}$$","nb_nodes":"$n$","nb_edges":"$m$","epsilon":"$\epsilon$"}
-
-size={"nb_nodes":nx.number_of_nodes,"nb_edges":nx.number_of_edges}
