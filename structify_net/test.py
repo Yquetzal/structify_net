@@ -420,21 +420,7 @@ def scores_for_rank_models(rank_models,m,scores=None,epsilons=0,runs=1,details=F
     if not isinstance(rank_models,dict):
         rank_models = {"model":rank_models}
 
-    all_dfs=[]
-    for eps in (pbar := tqdm(epsilons, desc="Epsilon: ",position=0,leave=False)):
-    #for eps in epsilons:
-        pbar.set_description(f"Epsilon: {round(eps,4)}")
-        for name,rank_model in rank_models.items():
-            all_generators[name]=rank_model.get_generator(eps,m=m)
-        df_alpha = scores_for_generators(all_generators,scores=scores,runs=runs,details=details,latex_names=latex_names)
-        df_alpha["epsilon"]=[eps]*len(df_alpha)
-        all_dfs.append(df_alpha)
-    all_alpha=pd.concat(all_dfs)
-    all_alpha.reset_index(inplace=True,drop=True)
-    
-    if latex_names:
-        all_alpha.rename({"epsilon":"$\\epsilon$"},axis=1,inplace=True)
-    return all_alpha
+
 
 
 
