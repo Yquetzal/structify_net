@@ -18,10 +18,11 @@ Structure Zoo
 .. Individual models
 .. -----------------
 
-.. .. autosummary::
-..    :toctree: generated/
+.. autosummary::
+   :toctree: generated/
 
-..    zoo.sort_distances
+   zoo.sort_distances
+   
 ..    zoo.sort_blocks_assortative
 ..    zoo.sort_overlap_communities
 ..    zoo.sort_largest_disconnected_cliques
