@@ -421,7 +421,10 @@ def scores_for_rank_models(rank_models,m,scores=None,epsilons=0,runs=1,details=F
         rank_models = {"model":rank_models}
 
     all_dfs=[]
-    
+    for eps in (pbar := tqdm(epsilons, desc="Epsilon: ",position=0,leave=False)):
+    #for eps in epsilons:
+        pbar.set_description(f"Epsilon: {round(eps,4)}")
+        
     all_alpha=pd.concat(all_dfs)
     all_alpha.reset_index(inplace=True,drop=True)
     
