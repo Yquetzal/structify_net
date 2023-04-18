@@ -40,7 +40,7 @@ Individual models
 
 function to get instanciated model collections
 ----------------------------------------------
-.. .. autosummary::
+ .. autosummary::
    :toctree: generated/
 
    zoo.get_all_rank_models
