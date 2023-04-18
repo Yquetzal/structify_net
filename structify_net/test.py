@@ -132,3 +132,131 @@ def modularity(graph,normalized=True):
         ref_mod = nx.algorithms.community.modularity(ref_model,nx.algorithms.community.louvain_communities(ref_model))
         mod = max(0,(mod-ref_mod)/(1-ref_mod))
     return mod
+
+def _gini_coefficient(x):
+    x=np.array(x)
+    """Compute Gini coefficient of array of values"""
+    diffsum = 0
+    for i, xi in enumerate(x[:-1], 1):
+        diffsum += np.sum(np.abs(xi - x[i:]))
+    return diffsum / (len(x)**2 * np.mean(x))
+
+def degree_heterogeneity(graph):
+    """Compute the degree heterogeneity of the graph
+    
+    Args:
+        graph (nx.Graph): A graph
+    Returns:
+        float: The degree heterogeneity of the graph
+    """
+    degrees = [d for n, d in graph.degree()]
+    heterogeneity = _gini_coefficient(degrees)
+    return heterogeneity
+    #avg_degree=statistics.mean([d for n, d in graph.degree()]) 
+    #degree_heterogeneity=statistics.stdev(degrees)-statistics.sqrt(avg_degree)
+
+def is_degree_heterogeneous(graph):
+    """Returns True if the graph is degree heterogeneous, False otherwise
+    
+    A graph is considered degree heterogeneous if its degree heterogeneity is greater than the average between the degree heterogeneity of a random graph with the same number of nodes and edges, and a power law graph with the same number of nodes and edges.
+    """
+    avg_degree = np.average([d for n, d in graph.degree()])
+    reference_threshold = _gini_coefficient(np.random.poisson(avg_degree,len(graph.nodes)))
+    power_law_threshold = _gini_coefficient(nx.utils.powerlaw_sequence(len(graph.nodes),3))
+    #print("-",degree_heterogeneity(graph),reference_threshold,power_law_threshold)
+    return degree_heterogeneity(graph)>((reference_threshold+power_law_threshold)/2)
+
+def _robustness_func(g:nx.Graph):
+    nb_nodes=len(g.nodes)
+    hub_sorted = [k for k,v in sorted(g.degree, key=lambda x: x[1], reverse=True)]
+    #print(hub_sorted)
+    for i in [1,2,3,4,5,6,7,8,9,10,20,30,40,49]:
+        #print()
+        g2 =g.copy()
+        g2.remove_nodes_from(hub_sorted[:int(i/100*nb_nodes)])
+        largest_CC= len(max(nx.connected_components(g2), key=len))
+        if largest_CC<nb_nodes*0.5:
+            return i/50
+    return 50/50
+
+def robustness(graph):
+    """Robustness of the graph
+    
+    Robustness is defined as the percentage of nodes that need to be removed to disconnect the graph. It is computed by removing nodes from the graph, starting from the most connected nodes, until the graph is disconnected. The percentage of nodes removed is then returned.
+
+    Args:
+        graph (_type_): a graph
+
+    Returns:
+        _type_: robustness of the graph
+    """
+    return _robustness_func(graph)
+
+def degree_assortativity(graph,normalized=False,positive_only=True,disassortativity=False):
+    """Degree assortativity coefficient of the graph
+    
+    The degree assortativity coefficient is computed as the Pearson correlation coefficient between the degrees of the nodes. If normalized=True, it is normalized to be between 0 and 1. If positive_only=True, it is set to 0 if negative. If disassortativity=True, it is set to -1 if positive and 1 if negative.
+
+    Args:
+        graph (_type_): _description_
+        normalized (bool, optional): _description_. Defaults to False.
+        positive_only (bool, optional): _description_. Defaults to True.
+        disassortativity (bool, optional): _description_. Defaults to False.
+
+    Returns:
+        _type_: _description_
+    """
+    if not is_degree_heterogeneous(graph):
+        deg_coeff=0
+    else:
+        degrees = [d for n, d in graph.degree()]
+        deg_coeff=0
+        for k in degrees:
+            if k!=degrees[0]:  
+                deg_coeff=nx.degree_assortativity_coefficient(graph)
+                break
+    if normalized:
+        deg_coeff=deg_coeff/2+0.5
+    if disassortativity:
+        deg_coeff=-deg_coeff
+    if positive_only:
+        deg_coeff=max(0,deg_coeff)
+    return deg_coeff
+
+def hierarchy(graph,normalized=False,positive_only=True):
+    """Hierarchy of the graph
+    
+    The hierarchy is computed as the Spearman correlation coefficient between the degrees and the clustering coefficients of the nodes. If normalized=True, it is normalized to be between 0 and 1. If positive_only=True, it is set to 0 if negative.
+
+    Args:
+        graph (_type_): A graph
+        normalized (bool, optional): If True, the hierarchy is normalized to be between 0 and 1. Defaults to False.
+        positive_only (bool, optional): IF True, the hierarchy is set to 0 if negative. Defaults to True.
+
+    Returns:
+        _type_: hierarchy of the graph
+    """
+    degrees = [d for n, d in graph.degree()]
+    clusterings = [d for n, d in nx.clustering(graph).items()]
+    if not is_degree_heterogeneous(graph):
+        hierarchical=0
+    else:
+        hierarchical=0
+        constant_degrees=True
+        constant_clustering=True
+        for i in range(len(degrees)):
+            if degrees[i]!=degrees[0]:
+                constant_degrees=False
+            if clusterings[i]!=clusterings[0]:
+                constant_clustering=False
+            if not constant_degrees and not constant_clustering:
+                hierarchical=-scipy.stats.spearmanr(degrees,clusterings).correlation
+                break
+            
+        if np.isnan(hierarchical):
+            hierarchical=0
+    if normalized:
+        hierarchical=hierarchical/2+0.5
+    if positive_only:
+        hierarchical=max(0,hierarchical)
+    return hierarchical
