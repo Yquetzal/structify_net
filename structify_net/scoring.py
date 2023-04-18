@@ -7,7 +7,7 @@ import pandas as pd
 import structify_net as stn
 #from structify_net.structureClasses import Rank_model, Graph_generator
 import numbers
-import tqdm
+from tqdm.auto import tqdm
 
 
 def _largest_component(graph):
@@ -381,7 +381,7 @@ def scores_for_generators(generators,scores=None,runs=1,details=False,latex_name
         _type_: _description_
     """
     to_return = pd.DataFrame()
-    for i in tqdm.auto.tqdm(range(runs),desc="Run",leave=False, position=0,):
+    for i in tqdm(range(runs),desc="Run",leave=False, position=0,):
         graphs = {name:generator.generate() for name,generator in generators.items()}
         results= scores_for_graphs(graphs,scores=scores,latex_names=latex_names)
         to_return = pd.concat([to_return,results])
@@ -416,7 +416,7 @@ def scores_for_rank_models(rank_models,m,scores=None,epsilons=0,runs=1,details=F
         else:
             epsilons=[0]+list(np.logspace(-4,0,epsilons-1))
     all_dfs=[]
-    for eps in (pbar := tqdm.auto.tqdm(epsilons, desc="Epsilon: ",position=0,leave=False)):
+    for eps in (pbar := tqdm(epsilons, desc="Epsilon: ",position=0,leave=False)):
     #for eps in epsilons:
         pbar.set_description(f"Epsilon: {round(eps,4)}")
         global_name="eps="+str(round(float(eps),4))+": "
