@@ -1,6 +1,7 @@
 Structure Zoo
 ==================
 
+.. currentmodule:: structify_net
 
 The structure zoo is a collection of structures. It contains both classic ones such as bloc structures, spatial structures or Watts-Strogatz structures, and less common ones. The zoo is a good place to start if you want to learn about the different types of structures that can be created with the library.
 
@@ -13,7 +14,6 @@ There are some useful shortcuts to get collection of structures from the
 
 The function :func:`get_all_rank_models` return instanciated models. See details below.
 
-.. currentmodule:: structify_net
 
 Individual models
 -----------------
