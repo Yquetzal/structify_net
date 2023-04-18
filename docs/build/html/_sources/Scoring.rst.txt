@@ -1,10 +1,10 @@
 Scoring
 ==================
 
-.. .. currentmodule:: structify_net
+.. currentmodule:: structify_net
 
 
-.. The scoring submodule contains a collection of scoring function to describe graphs. The scoring function are used to compare graphs.
+The scoring submodule contains a collection of scoring function to describe graphs. The scoring function are used to compare graphs.
 
 .. The scoring function are defined in the :mod:`scoring` module.
 
@@ -16,13 +16,13 @@ Scoring
 
 
 
-.. Individual scoring functions
-.. ----------------------------
+Individual scoring functions
+----------------------------
 
-.. .. autosummary::
-..    :toctree: generated/
+.. autosummary::
+   :toctree: generated/
 
-..    scoring.has_giant_component
+   scoring.has_giant_component
 ..    scoring.giant_component_ratio
 ..    scoring.transitivity
 ..    scoring.average_clustering
