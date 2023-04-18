@@ -8,11 +8,11 @@ The structure zoo is a collection of structures. It contains both classic ones s
 The scoring function are defined in the `zoo` submodule.
 There are some useful shortcuts to get collection of structures from the 
 
-- :data:`all_models_no_param`: contains all the model functions that do not require any parameter.
-- :data:`all_models_with_m`: returns all the model functions that require a parameter `m` (Expected number of edges).
-- :data:`all_models`: returns all the models functions
+- :data:`zoo.all_models_no_param`: contains all the model functions that do not require any parameter.
+- :data:`zoo.all_models_with_m`: returns all the model functions that require a parameter `m` (Expected number of edges).
+- :data:`zoo.all_models`: returns all the models functions
 
-The function :func:`get_all_rank_models` return instanciated models. See details below.
+The function :func:`zoo.get_all_rank_models` return instanciated models. See details below.
 
 
 Individual models
