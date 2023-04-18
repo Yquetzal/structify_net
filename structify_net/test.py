@@ -325,137 +325,14 @@ def coreness(graph,normalized=True):
         coreness= coreness/max_possible_coreness
     return coreness
 
-def compute_all_scores(graph):
-    """Compute all scores for a graph
-    
-    Args:
-        graph (_type_): A graph
-    
-    Returns:
-        :class:`pd.DataFrame`: A dictionary with the scores
-        
-    """
-    to_return = {}
-    for name,func in default_scores.items():
-        to_return[name]=func(graph)
-    return to_return
-
-def scores_for_graphs(graphs,scores=None,latex_names=True):
-    """Compute scores for a list of graphs
-
-    Args:
-        graphs (_type_): A dictionary of graphs such as {name:graph}
-        scores (_type_, optional): A dictionary of scores such as {name:score}. Defaults to None.
-        latex_names (bool, optional): If True, the names of the scores are latex formulas. Defaults to True.
-    """
-    records=[]
-    if scores is None:
-        scores = get_default_scores()
-    for graph_name,graph in graphs.items():
-        line=[]
-        for score_name,func in scores.items():
-            line.append(func(graph))
-        records.append([graph_name]+line)
-    
-    df = pd.DataFrame(records,columns=["name"]+list(scores.keys()))
-    if latex_names:
-        cols=df.columns
-        cols=_names2latex_list(cols)
-        df.columns=cols
-    return(df)
 
 
 
 
-def scores_for_generators(generators,scores=None,runs=1,details=False,latex_names=True):
-    """Scores for a list of generators
-
-    Args:
-        generators (_type_): A dictionary of generators such as {name:generator}
-        scores (_type_, optional): a dictionary of scores such as {name:score}. Defaults to None.
-        runs (int, optional): Number of runs. Defaults to 1.
-        details (bool, optional): If True, the results of each run are returned. Defaults to False.
-        latex_names (bool, optional): If True, the names of the scores are latex formulas. Defaults to True.
-
-    Returns:
-        _type_: _description_
-    """
-    to_return = pd.DataFrame()
-    for i in tqdm(range(runs),desc="Run",leave=False, position=0,):
-        graphs = {name:generator.generate() for name,generator in generators.items()}
-        results= scores_for_graphs(graphs,scores=scores,latex_names=latex_names)
-        to_return = pd.concat([to_return,results])
-        #scores["run"]=[i]*len(scores)
-    if details:
-        return to_return
-    to_return=to_return.groupby("name").mean().reset_index()
-    return to_return
 
 
-def scores_for_rank_models(rank_models,m,scores=None,epsilons=0,runs=1,details=False,latex_names=True):
-    """Scores for a list of rank models
-
-    Args:
-        rank_models (_type_): A dictionary of rank models such as {name:rank_model}
-        m (_type_): Number of edges
-        scores (_type_, optional): A dictionary of scores such as {name:score}. Defaults to None.
-        epsilons (int, optional): A list of epsilons. Defaults to 0.
-        runs (int, optional): number of runs. Defaults to 1.
-        details (bool, optional): If True, the results of each run are returned. Defaults to False.
-        latex_names (bool, optional): IF True, the names of the scores are latex formulas. Defaults to True.
-
-    Returns:
-        _type_: dataframe with the scores
-    """
-    all_generators={}
-    if not isinstance(rank_models,dict):
-        rank_models = {"model":rank_models}
-    if isinstance(epsilons,numbers.Number):
-        if epsilons<=1:
-            epsilons=[epsilons]
-        else:
-            epsilons=[0]+list(np.logspace(-4,0,epsilons-1))
-    all_dfs=[]
-    for eps in (pbar := tqdm(epsilons, desc="Epsilon: ",position=0,leave=False)):
-    #for eps in epsilons:
-        pbar.set_description(f"Epsilon: {round(eps,4)}")
-        global_name="eps="+str(round(float(eps),4))+": "
-        for name,rank_model in rank_models.items():
-            all_generators[name]=rank_model.get_generator(eps,m=m)
-        df_alpha = scores_for_generators(all_generators,scores=scores,runs=runs,details=details,latex_names=latex_names)
-        df_alpha["epsilon"]=[eps]*len(df_alpha)
-        all_dfs.append(df_alpha)
-    all_alpha=pd.concat(all_dfs)
-    all_alpha.reset_index(inplace=True,drop=True)
-    
-    if latex_names:
-        all_alpha.rename({"epsilon":"$\\epsilon$"},axis=1,inplace=True)
-    return all_alpha
 
 
-def scores_for_rank_functions(rank_functions,n,m,scores=None,epsilons=0,runs=1,latex_names=True):
-    """Scores for a list of rank functions
-
-    Args:
-        rank_functions (_type_): A dictionary of rank functions such as {name:rank_function}
-        n (_type_): number of nodes
-        m (_type_): number of edges
-        scores (_type_, optional): A dictionary of scores such as {name:score}. Defaults to None.
-        epsilons (int, optional): A list of epsilons. Defaults to 0.
-        runs (int, optional): number of runs. Defaults to 1.
-        latex_names (bool, optional):   If True, the names of the scores are latex formulas. Defaults to True.
-
-    Returns:
-        _type_: dataframe with the scores
-    """
-    rank_models = {name:stn.Rank_model(structure_function(n)) for name,structure_function in rank_functions.items()}
-    return scores_for_rank_models(rank_models,m=m,scores=scores,epsilons=epsilons,runs=runs,latex_names=latex_names)
-    # all_generators={}
-    # if isinstance(epsilons,int):
-    #     epsilons=[epsilons]
-    # for i,(name,structure_function) in enumerate(rank_functions.items()):
-    #     all_generators[name]=structure_function(n)
-    # return scores_for_rank_models(all_generators,scores=scores,epsilons=epsilons,m=m)
 
 def compare_graphs(df_reference,df_graphs,best_by_name=False,score_difference=False):
     """Compares a list of graphs to a reference graph
@@ -501,41 +378,3 @@ def compare_graphs(df_reference,df_graphs,best_by_name=False,score_difference=Fa
 
         
     return df_to_return
-
-def get_default_scores(with_size=False,latex_names=True):
-    """Returns the default scores
-    
-    Returns a dictionary of scores such as {name:score} 
-    
-    Args:
-        with_size (bool, optional): If True, the size of the graph is added to the scores. Defaults to False.
-        latex_names (bool, optional): If True, the names of the scores are latex formulas. Defaults to False.
-    
-    Returns:
-        _type_: A dictionary of scores such as {name:score}
-    
-    """
-    if with_size:
-        return default_scores|size
-
-    if latex_names:
-        return _names2latex(default_scores)
-    return default_scores
-
-def _names2latex_list(scores):
-    to_return = []
-    for k in scores:
-        if k in score_names:
-            to_return.append(score_names[k])
-        else:
-            to_return.append(k)
-    return to_return
-
-def _names2latex(scores):
-    to_return = {}
-    for k,v in scores.items():
-        if k in score_names:
-            to_return[score_names[k]]=v
-        else:
-            to_return[k]=v
-    return to_return
