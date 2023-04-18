@@ -420,7 +420,14 @@ def scores_for_rank_models(rank_models,m,scores=None,epsilons=0,runs=1,details=F
     if not isinstance(rank_models,dict):
         rank_models = {"model":rank_models}
 
-
+    all_dfs=[]
+    
+    all_alpha=pd.concat(all_dfs)
+    all_alpha.reset_index(inplace=True,drop=True)
+    
+    if latex_names:
+        all_alpha.rename({"epsilon":"$\\epsilon$"},axis=1,inplace=True)
+    return all_alpha
 
 
 
