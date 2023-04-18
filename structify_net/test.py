@@ -325,14 +325,6 @@ def coreness(graph,normalized=True):
         coreness= coreness/max_possible_coreness
     return coreness
 
-
-
-
-
-
-
-
-
 def compute_all_scores(graph):
     """Compute all scores for a graph
     
@@ -374,6 +366,7 @@ def scores_for_graphs(graphs,scores=None,latex_names=True):
 
 
 
+
 def scores_for_generators(generators,scores=None,runs=1,details=False,latex_names=True):
     """Scores for a list of generators
 
@@ -399,8 +392,6 @@ def scores_for_generators(generators,scores=None,runs=1,details=False,latex_name
     return to_return
 
 
-
-
 def scores_for_rank_models(rank_models,m,scores=None,epsilons=0,runs=1,details=False,latex_names=True):
     """Scores for a list of rank models
 
@@ -419,13 +410,21 @@ def scores_for_rank_models(rank_models,m,scores=None,epsilons=0,runs=1,details=F
     all_generators={}
     if not isinstance(rank_models,dict):
         rank_models = {"model":rank_models}
-
+    if isinstance(epsilons,numbers.Number):
+        if epsilons<=1:
+            epsilons=[epsilons]
+        else:
+            epsilons=[0]+list(np.logspace(-4,0,epsilons-1))
     all_dfs=[]
-    for eps in (pbar := tqdm(epsilons, desc="Epsilon: ",position=0,leave=False)):
+    pbar = tqdm(epsilons, desc="Epsilon: ",position=0,leave=False)
+    for eps in pbar:
     #for eps in epsilons:
-        #pbar.set_description(f"Epsilon: {round(eps,4)}")
-        print(f"Epsilon: {round(eps,4)}")
-        
+        pbar.set_description(f"Epsilon: {round(eps,4)}")
+        for name,rank_model in rank_models.items():
+            all_generators[name]=rank_model.get_generator(eps,m=m)
+        df_alpha = scores_for_generators(all_generators,scores=scores,runs=runs,details=details,latex_names=latex_names)
+        df_alpha["epsilon"]=[eps]*len(df_alpha)
+        all_dfs.append(df_alpha)
     all_alpha=pd.concat(all_dfs)
     all_alpha.reset_index(inplace=True,drop=True)
     
@@ -434,11 +433,29 @@ def scores_for_rank_models(rank_models,m,scores=None,epsilons=0,runs=1,details=F
     return all_alpha
 
 
+def scores_for_rank_functions(rank_functions,n,m,scores=None,epsilons=0,runs=1,latex_names=True):
+    """Scores for a list of rank functions
 
+    Args:
+        rank_functions (_type_): A dictionary of rank functions such as {name:rank_function}
+        n (_type_): number of nodes
+        m (_type_): number of edges
+        scores (_type_, optional): A dictionary of scores such as {name:score}. Defaults to None.
+        epsilons (int, optional): A list of epsilons. Defaults to 0.
+        runs (int, optional): number of runs. Defaults to 1.
+        latex_names (bool, optional):   If True, the names of the scores are latex formulas. Defaults to True.
 
-
-
-
+    Returns:
+        _type_: dataframe with the scores
+    """
+    rank_models = {name:stn.Rank_model(structure_function(n)) for name,structure_function in rank_functions.items()}
+    return scores_for_rank_models(rank_models,m=m,scores=scores,epsilons=epsilons,runs=runs,latex_names=latex_names)
+    # all_generators={}
+    # if isinstance(epsilons,int):
+    #     epsilons=[epsilons]
+    # for i,(name,structure_function) in enumerate(rank_functions.items()):
+    #     all_generators[name]=structure_function(n)
+    # return scores_for_rank_models(all_generators,scores=scores,epsilons=epsilons,m=m)
 
 def compare_graphs(df_reference,df_graphs,best_by_name=False,score_difference=False):
     """Compares a list of graphs to a reference graph
