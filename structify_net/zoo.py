@@ -509,3 +509,82 @@ def sort_fractal_hierarchical(nodes,d=3):
     sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=False)
     return stn.Rank_model([e[0] for e in sorted_pairs], g)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def sort_fractal_star(nodes,d=2):
+    """A rank model based on a fractal structure
+    
+    This structure is designed to maximize the star structure of the network. The network is embedded in a binary tree. The order of the pairs is based on the distance between the hierarchical levels.
+
+    Args:
+        nodes (_type_): Describe nodes. Can be either a networkx graph (node names and node attributes are preserved) or an integer (number of nodes)
+        d (int, optional): degree of the binary tree. Defaults to 2.
+
+    Returns:
+        :class:`structify_net.Rank_model`:: rank model
+    """
+    if not isinstance(nodes,nx.Graph):
+        g=_n_to_graph(nodes)
+    else:
+        g=nodes
+
+    nb_nodes=len(g.nodes)
+    height = math.ceil(math.log(nb_nodes, d)+1)
+    binary_tree = nx.balanced_tree(d,height-1)
+    leaves_ids=list(binary_tree.nodes)[:nb_nodes]
+    binary_tree = nx.relabel_nodes(binary_tree,{n:"temp_"+str(i) for i,n in enumerate(leaves_ids)})
+
+    pairs=itertools.combinations(g.nodes,2)
+    #all_distances = {x:v for x,v in nx.all_pairs_shortest_path_length(binary_tree) }
+    #degrees = {k:v for k,v in binary_tree.degree}
+    heights = nx.shortest_path_length(binary_tree,"temp_"+str(0))
+    sorted_pairs = {(u,v):-abs(heights["temp_"+str(u)]-heights["temp_"+str(v)])+random.random()/1000 for (u,v) in pairs}
+    sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=False)
+    return stn.Rank_model([e[0] for e in sorted_pairs], g)
+
+# def sort_smallWorldTrick(nodes):
+#     if not isinstance(nodes,nx.Graph):
+#         g=_n_to_graph(nodes)
+#     else:
+#         g=nodes
+
+#     sorted_pairs=itertools.combinations(g.nodes,2)
+    
+#     def trick(x):
+#         if x[0]==0 or x[1]==0:
+#             return 0
+#         return x[0]+x[1]
+        
+#     sorted_pairs = sorted(list(sorted_pairs),key=trick)
+#     return Rank_model([e[0] for e in sorted_pairs], g)
+
+
+
