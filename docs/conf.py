@@ -14,7 +14,7 @@ release = '0.1'
 import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
-sys.path.insert(0, os.path.abspath('../structify_net'))
+#sys.path.insert(0, os.path.abspath('../structify_net'))
 
 # from mock import Mock as MagicMock
 
@@ -35,7 +35,6 @@ extensions = ['sphinx.ext.autodoc','sphinx.ext.autosummary',"sphinx_rtd_theme"]
 templates_path = ['_templates']
 exclude_patterns = []
 
-autosummary_generate = True
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
@@ -45,3 +44,5 @@ html_static_path = ['_static']
 html_css_files = [
     'custom.css',
 ]
+
+autosummary_generate = True
