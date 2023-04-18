@@ -17,17 +17,10 @@
     import structify_net.scoring as scoring
 
 
-.. parsed-literal::
-
-    The autoreload extension is already loaded. To reload it, use:
-      %reload_ext autoreload
-
-
-
-Introduction to Structify-Net
+Introduction to Structify_Net
 =============================
 
-Structify-Net is a network generator provided as a python library.
+Structify_Net is a network generator provided as a python library.
 
 It allows to generate networks with: \* A chosen number of nodes and
 edges \* A chosen structure \* A constrolled amount of randomness
@@ -120,7 +113,7 @@ We can plot the probability as a function of rank for various values of
 
 .. parsed-literal::
 
-    <matplotlib.legend.Legend at 0x163e35190>
+    <matplotlib.legend.Legend at 0x152007b90>
 
 
 
@@ -316,22 +309,22 @@ already low -as in a random network.
         <tr>
           <th>0</th>
           <td>model</td>
-          <td>0.665484</td>
-          <td>0.032179</td>
+          <td>0.665915</td>
+          <td>0.025265</td>
           <td>0.000100</td>
         </tr>
         <tr>
           <th>1</th>
           <td>model</td>
-          <td>0.662310</td>
-          <td>0.063461</td>
+          <td>0.663485</td>
+          <td>0.047969</td>
           <td>0.000278</td>
         </tr>
         <tr>
           <th>2</th>
           <td>model</td>
-          <td>0.655752</td>
-          <td>0.094771</td>
+          <td>0.656636</td>
+          <td>0.083419</td>
           <td>0.000774</td>
         </tr>
       </tbody>
@@ -483,35 +476,35 @@ We can replicate this experiment for all structures in our structure zoo
         <tr>
           <th>0</th>
           <td>ER</td>
-          <td>0.010917</td>
-          <td>0.443129</td>
+          <td>0.010125</td>
+          <td>0.443373</td>
           <td>0.0001</td>
         </tr>
         <tr>
           <th>1</th>
           <td>blocks_assortative</td>
-          <td>0.329688</td>
+          <td>0.324394</td>
           <td>0.000000</td>
           <td>0.0001</td>
         </tr>
         <tr>
           <th>2</th>
           <td>core_distance</td>
-          <td>0.601536</td>
+          <td>0.577451</td>
           <td>1.000000</td>
           <td>0.0001</td>
         </tr>
         <tr>
           <th>3</th>
           <td>disconnected_cliques</td>
-          <td>0.978549</td>
+          <td>0.979901</td>
           <td>0.000000</td>
           <td>0.0001</td>
         </tr>
         <tr>
           <th>4</th>
           <td>fractal_hierarchy</td>
-          <td>0.767801</td>
+          <td>0.768065</td>
           <td>1.000000</td>
           <td>0.0001</td>
         </tr>
@@ -555,37 +548,43 @@ grid to the random network
 
 .. parsed-literal::
 
-    eps=0.0001: runs:   0%|          | 0/1 [00:00<?, ?it/s]
+    Epsilon:   0%|          | 0/6 [00:00<?, ?it/s]
 
 
 
 .. parsed-literal::
 
-    eps=0.0006: runs:   0%|          | 0/1 [00:00<?, ?it/s]
+    Run:   0%|          | 0/1 [00:00<?, ?it/s]
 
 
 
 .. parsed-literal::
 
-    eps=0.004: runs:   0%|          | 0/1 [00:00<?, ?it/s]
+    Run:   0%|          | 0/1 [00:00<?, ?it/s]
 
 
 
 .. parsed-literal::
 
-    eps=0.0251: runs:   0%|          | 0/1 [00:00<?, ?it/s]
+    Run:   0%|          | 0/1 [00:00<?, ?it/s]
 
 
 
 .. parsed-literal::
 
-    eps=0.1585: runs:   0%|          | 0/1 [00:00<?, ?it/s]
+    Run:   0%|          | 0/1 [00:00<?, ?it/s]
 
 
 
 .. parsed-literal::
 
-    eps=1.0: runs:   0%|          | 0/1 [00:00<?, ?it/s]
+    Run:   0%|          | 0/1 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/1 [00:00<?, ?it/s]
 
 
 .. code:: ipython3
@@ -634,15 +633,15 @@ grid to the random network
         <tr>
           <th>0</th>
           <td>model</td>
-          <td>0.665732</td>
-          <td>0.665667</td>
-          <td>0.183673</td>
-          <td>0.040898</td>
+          <td>0.664360</td>
+          <td>0.664634</td>
+          <td>0.180000</td>
+          <td>0.065326</td>
           <td>1.00</td>
           <td>1.0</td>
-          <td>0.778950</td>
-          <td>0.225725</td>
-          <td>0.000794</td>
+          <td>0.775962</td>
+          <td>0.226029</td>
+          <td>0.001583</td>
           <td>0.0</td>
           <td>0.0</td>
           <td>0.000100</td>
@@ -650,15 +649,15 @@ grid to the random network
         <tr>
           <th>1</th>
           <td>model</td>
-          <td>0.661046</td>
-          <td>0.661939</td>
-          <td>0.183673</td>
-          <td>0.089374</td>
+          <td>0.659433</td>
+          <td>0.660141</td>
+          <td>0.180000</td>
+          <td>0.080159</td>
           <td>0.98</td>
           <td>1.0</td>
-          <td>0.772301</td>
-          <td>0.242511</td>
-          <td>0.005831</td>
+          <td>0.781333</td>
+          <td>0.278665</td>
+          <td>0.005440</td>
           <td>0.0</td>
           <td>0.0</td>
           <td>0.000631</td>
@@ -666,15 +665,15 @@ grid to the random network
         <tr>
           <th>2</th>
           <td>model</td>
-          <td>0.625780</td>
-          <td>0.630609</td>
-          <td>0.160000</td>
-          <td>0.198494</td>
+          <td>0.624378</td>
+          <td>0.628172</td>
+          <td>0.163265</td>
+          <td>0.188519</td>
           <td>0.98</td>
           <td>1.0</td>
-          <td>0.756816</td>
-          <td>0.222311</td>
-          <td>0.028706</td>
+          <td>0.762579</td>
+          <td>0.257194</td>
+          <td>0.027795</td>
           <td>0.0</td>
           <td>0.0</td>
           <td>0.003981</td>
@@ -682,15 +681,15 @@ grid to the random network
         <tr>
           <th>3</th>
           <td>model</td>
-          <td>0.460102</td>
-          <td>0.479636</td>
-          <td>0.140000</td>
-          <td>0.364194</td>
+          <td>0.448698</td>
+          <td>0.467446</td>
+          <td>0.142857</td>
+          <td>0.358133</td>
           <td>0.98</td>
           <td>1.0</td>
-          <td>0.650330</td>
-          <td>0.236926</td>
-          <td>0.077696</td>
+          <td>0.660792</td>
+          <td>0.217010</td>
+          <td>0.082736</td>
           <td>0.0</td>
           <td>0.0</td>
           <td>0.025119</td>
@@ -698,15 +697,15 @@ grid to the random network
         <tr>
           <th>4</th>
           <td>model</td>
-          <td>0.107233</td>
-          <td>0.117139</td>
+          <td>0.112286</td>
+          <td>0.121666</td>
           <td>0.142857</td>
-          <td>0.484675</td>
+          <td>0.483908</td>
           <td>0.98</td>
           <td>1.0</td>
-          <td>0.243960</td>
-          <td>0.163707</td>
-          <td>0.153446</td>
+          <td>0.265113</td>
+          <td>0.158098</td>
+          <td>0.153937</td>
           <td>0.0</td>
           <td>0.0</td>
           <td>0.158489</td>
@@ -714,15 +713,15 @@ grid to the random network
         <tr>
           <th>5</th>
           <td>model</td>
-          <td>0.020882</td>
-          <td>0.020709</td>
-          <td>0.122449</td>
-          <td>0.512133</td>
+          <td>0.020464</td>
+          <td>0.022244</td>
+          <td>0.140000</td>
+          <td>0.524080</td>
           <td>0.98</td>
           <td>1.0</td>
-          <td>0.011905</td>
-          <td>0.073875</td>
-          <td>0.184929</td>
+          <td>0.003275</td>
+          <td>0.065857</td>
+          <td>0.173969</td>
           <td>0.0</td>
           <td>0.0</td>
           <td>1.000000</td>
@@ -757,7 +756,13 @@ In this case, we plot all models in Structify’s Zoo, with
 
 .. parsed-literal::
 
-    eps=0.0: runs:   0%|          | 0/1 [00:00<?, ?it/s]
+    Epsilon:   0%|          | 0/1 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/1 [00:00<?, ?it/s]
 
 
 .. code:: ipython3
@@ -963,88 +968,88 @@ those selected models, with the properties of our graph for comparison
       <tbody>
         <tr>
           <th>0</th>
-          <td>fractal_hierarchy</td>
-          <td>0.230688</td>
-          <td>0.489009</td>
-          <td>0.407639</td>
-          <td>0.913731</td>
-          <td>0.373</td>
-          <td>0.994118</td>
-          <td>0.051910</td>
-          <td>0.395944</td>
-          <td>0.321757</td>
+          <td>core_distance</td>
+          <td>0.264922</td>
+          <td>0.365756</td>
+          <td>0.482639</td>
+          <td>0.764972</td>
+          <td>0.520</td>
+          <td>0.952941</td>
           <td>0.000000</td>
-          <td>0.189563</td>
-          <td>0.215443</td>
-          <td>0.987277</td>
+          <td>0.297907</td>
+          <td>0.440170</td>
+          <td>0.000000</td>
+          <td>0.026828</td>
+          <td>0.464159</td>
+          <td>0.708370</td>
         </tr>
         <tr>
           <th>1</th>
-          <td>fractal_root</td>
-          <td>0.435860</td>
-          <td>0.609586</td>
-          <td>0.415972</td>
-          <td>0.545049</td>
-          <td>0.420</td>
-          <td>1.000000</td>
-          <td>0.311289</td>
-          <td>0.498237</td>
-          <td>0.265365</td>
-          <td>0.020336</td>
-          <td>0.283346</td>
-          <td>0.100000</td>
-          <td>1.147348</td>
+          <td>maximal_stars</td>
+          <td>0.227017</td>
+          <td>0.455922</td>
+          <td>0.443750</td>
+          <td>0.923812</td>
+          <td>0.408</td>
+          <td>0.979412</td>
+          <td>0.000736</td>
+          <td>0.295498</td>
+          <td>0.422595</td>
+          <td>0.000000</td>
+          <td>0.139603</td>
+          <td>0.464159</td>
+          <td>0.793761</td>
         </tr>
         <tr>
           <th>2</th>
-          <td>maximal_stars</td>
-          <td>0.211125</td>
-          <td>0.372338</td>
-          <td>0.438095</td>
-          <td>0.873728</td>
-          <td>0.399</td>
-          <td>0.969118</td>
-          <td>0.000447</td>
-          <td>0.296832</td>
-          <td>0.427738</td>
+          <td>fractal_hierarchy</td>
+          <td>0.212027</td>
+          <td>0.481477</td>
+          <td>0.412500</td>
+          <td>0.897559</td>
+          <td>0.307</td>
+          <td>0.994118</td>
+          <td>0.044504</td>
+          <td>0.404413</td>
+          <td>0.328545</td>
           <td>0.000000</td>
-          <td>0.030015</td>
-          <td>0.464159</td>
-          <td>1.283043</td>
+          <td>0.168908</td>
+          <td>0.215443</td>
+          <td>0.877394</td>
         </tr>
         <tr>
           <th>3</th>
-          <td>core_distance</td>
-          <td>0.316464</td>
-          <td>0.318343</td>
-          <td>0.536806</td>
-          <td>0.637247</td>
-          <td>0.520</td>
-          <td>0.926471</td>
-          <td>0.000000</td>
-          <td>0.281354</td>
-          <td>0.471294</td>
-          <td>0.000000</td>
-          <td>0.000000</td>
+          <td>fractal_root</td>
+          <td>0.230075</td>
+          <td>0.254190</td>
+          <td>0.402679</td>
+          <td>0.650151</td>
+          <td>0.630</td>
+          <td>0.992647</td>
+          <td>0.089554</td>
+          <td>0.361024</td>
+          <td>0.280110</td>
+          <td>0.007156</td>
+          <td>0.029323</td>
           <td>0.464159</td>
-          <td>1.488585</td>
+          <td>0.935035</td>
         </tr>
         <tr>
           <th>4</th>
-          <td>fractal_star</td>
-          <td>0.113795</td>
-          <td>0.183118</td>
-          <td>0.414583</td>
-          <td>0.820181</td>
-          <td>0.500</td>
-          <td>0.983824</td>
-          <td>0.000817</td>
-          <td>0.310862</td>
-          <td>0.355246</td>
+          <td>louvain</td>
+          <td>0.250429</td>
+          <td>0.238519</td>
+          <td>0.454861</td>
+          <td>0.666946</td>
+          <td>0.736</td>
+          <td>0.989706</td>
+          <td>0.098685</td>
+          <td>0.375875</td>
+          <td>0.251104</td>
+          <td>0.019604</td>
           <td>0.000000</td>
-          <td>0.004940</td>
           <td>0.464159</td>
-          <td>1.622282</td>
+          <td>0.988167</td>
         </tr>
       </tbody>
     </table>
