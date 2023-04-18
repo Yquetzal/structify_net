@@ -6,14 +6,14 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'Structify_net'
+project = 'structify_net'
 copyright = '2023, Rémy Cazabet'
 author = 'Rémy Cazabet'
 release = '0.1'
 
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../structify_net'))
+sys.path.insert(0, os.path.abspath('..'))
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
