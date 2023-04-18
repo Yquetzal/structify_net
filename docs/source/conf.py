@@ -13,7 +13,7 @@ release = '0.1'
 
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../strrucify_net'))
+sys.path.insert(0, os.path.abspath('../../structify_net'))
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -23,7 +23,7 @@ extensions = ['sphinx.ext.autodoc','sphinx.ext.autosummary',"sphinx_rtd_theme"]
 templates_path = ['_templates']
 exclude_patterns = []
 
-
+autosummary_generate = True
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
