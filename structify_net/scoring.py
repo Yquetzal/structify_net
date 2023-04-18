@@ -1,10 +1,10 @@
-import statistics
 import math
 import networkx as nx
 import numpy as np
 from scipy.stats import spearmanr
 import pandas as pd
-from structify_net.structureClasses import Rank_model, Graph_generator
+import structify_net as stn
+#from structify_net.structureClasses import Rank_model, Graph_generator
 import numbers
 from tqdm.auto import tqdm
 
@@ -126,7 +126,7 @@ def modularity(graph,normalized=True):
     """
     mod=nx.algorithms.community.modularity(graph,nx.algorithms.community.louvain_communities(graph))
     if normalized:
-        ref_model = Graph_generator.ER(graph.number_of_nodes(),nx.density(graph))
+        ref_model = stn.Graph_generator.ER(graph.number_of_nodes(),nx.density(graph))
         ref_mod = nx.algorithms.community.modularity(ref_model,nx.algorithms.community.louvain_communities(ref_model))
         mod = max(0,(mod-ref_mod)/(1-ref_mod))
     return mod
@@ -447,7 +447,7 @@ def scores_for_rank_functions(rank_functions,n,m,scores=None,epsilons=0,runs=1,l
     Returns:
         _type_: dataframe with the scores
     """
-    rank_models = {name:Rank_model(structure_function(n)) for name,structure_function in rank_functions.items()}
+    rank_models = {name:stn.Rank_model(structure_function(n)) for name,structure_function in rank_functions.items()}
     return scores_for_rank_models(rank_models,m=m,scores=scores,epsilons=epsilons,runs=runs,latex_names=latex_names)
     # all_generators={}
     # if isinstance(epsilons,int):

@@ -6,7 +6,7 @@ Scoring
 
 The scoring submodule contains a collection of scoring function to describe graphs. The scoring function are used to compare graphs.
 
-The scoring function are defined in the :mod:`structify_net.scoring` module.
+The scoring function are defined in the :mod:`scoring` module.
 
 - :data:`scoring.default_scores`: contains all available scores in a dictionary {name: score}.
 - :data:`scoring.size`: contains additional scores describing the size of the graphs (number of nodes, number of edges)

@@ -16,6 +16,14 @@
     import structify_net.zoo as zoo
     import structify_net.scoring as scoring
 
+
+.. parsed-literal::
+
+    The autoreload extension is already loaded. To reload it, use:
+      %reload_ext autoreload
+
+
+
 Introduction to Structify-Net
 =============================
 
@@ -68,7 +76,7 @@ order as a matrix
 
 
 
-.. image:: output_7_0.png
+.. image:: output_8_0.png
 
 
 Step 3: Edge probability definition
@@ -99,7 +107,7 @@ We can plot the probability as a function of rank for various values of
 
     fig, ax = plt.subplots()
     for epsilon in np.arange(0,1.1,1/6):
-        probas = stn.sort_nestedness(n).get_generator(epsilon=epsilon,m=m)
+        probas = zoo.sort_nestedness(n).get_generator(epsilon=epsilon,m=m)
         elt = probas.plot_proba_function(ax=ax)
         #elt=viz.plot_proba_function(probas,ax=ax)
         elt[-1].set_label(format(epsilon, '.2f'))
@@ -112,12 +120,12 @@ We can plot the probability as a function of rank for various values of
 
 .. parsed-literal::
 
-    <matplotlib.legend.Legend at 0x1489190d0>
+    <matplotlib.legend.Legend at 0x163e35190>
 
 
 
 
-.. image:: output_11_1.png
+.. image:: output_12_1.png
 
 
 Step 4: Generate a graph from edge probabilities
@@ -125,7 +133,7 @@ Step 4: Generate a graph from edge probabilities
 
 .. code:: ipython3
 
-    generator = stn.sort_nestedness(n).get_generator(epsilon=0.5,m=m)
+    generator = zoo.sort_nestedness(n).get_generator(epsilon=0.5,m=m)
     g_generated = generator.generate()
 
 .. code:: ipython3
@@ -143,7 +151,7 @@ Step 4: Generate a graph from edge probabilities
 
 
 
-.. image:: output_14_1.png
+.. image:: output_15_1.png
 
 
 Whole process in a function
@@ -177,7 +185,7 @@ exemplified below
 
 
 
-.. image:: output_18_0.png
+.. image:: output_19_0.png
 
 
 Graph description
@@ -206,8 +214,74 @@ already low -as in a random network.
     df_scores = WS_model.scores(m=m,
                     scores={"clustering":scoring.average_clustering,
                             "short paths":scoring.average_shortest_path_length},
-                    epsilons=np.logspace(-4,0,10))
+                    epsilons=np.logspace(-4,0,10),latex_names=False)
     df_scores.head(3)
+
+
+
+.. parsed-literal::
+
+    Epsilon:   0%|          | 0/10 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/1 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/1 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/1 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/1 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/1 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/1 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/1 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/1 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/1 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/1 [00:00<?, ?it/s]
 
 
 
@@ -242,22 +316,22 @@ already low -as in a random network.
         <tr>
           <th>0</th>
           <td>model</td>
-          <td>0.666080</td>
-          <td>0.026688</td>
+          <td>0.665484</td>
+          <td>0.032179</td>
           <td>0.000100</td>
         </tr>
         <tr>
           <th>1</th>
           <td>model</td>
-          <td>0.663433</td>
-          <td>0.050277</td>
+          <td>0.662310</td>
+          <td>0.063461</td>
           <td>0.000278</td>
         </tr>
         <tr>
           <th>2</th>
           <td>model</td>
-          <td>0.656545</td>
-          <td>0.088951</td>
+          <td>0.655752</td>
+          <td>0.094771</td>
           <td>0.000774</td>
         </tr>
       </tbody>
@@ -290,7 +364,7 @@ star, such as each node is at distance 2 from all other node.
 
 
 
-.. image:: output_23_1.png
+.. image:: output_24_1.png
 
 
 Small World regime for other structures
@@ -303,7 +377,74 @@ We can replicate this experiment for all structures in our structure zoo
     df_scores = scoring.scores_for_rank_models(zoo.get_all_rank_models(n,m),m=m,
                            scores={"clustering":scoring.average_clustering,
                                    "short paths":scoring.average_shortest_path_length},
-                           epsilons=np.logspace(-4,0,10))                  
+                           epsilons=np.logspace(-4,0,10),latex_names=False)                  
+
+
+
+.. parsed-literal::
+
+    Epsilon:   0%|          | 0/10 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/1 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/1 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/1 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/1 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/1 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/1 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/1 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/1 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/1 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/1 [00:00<?, ?it/s]
+
 
 .. code:: ipython3
 
@@ -342,35 +483,35 @@ We can replicate this experiment for all structures in our structure zoo
         <tr>
           <th>0</th>
           <td>ER</td>
-          <td>0.010597</td>
-          <td>0.442601</td>
+          <td>0.010917</td>
+          <td>0.443129</td>
           <td>0.0001</td>
         </tr>
         <tr>
           <th>1</th>
           <td>blocks_assortative</td>
-          <td>0.329862</td>
+          <td>0.329688</td>
           <td>0.000000</td>
           <td>0.0001</td>
         </tr>
         <tr>
           <th>2</th>
           <td>core_distance</td>
-          <td>0.983615</td>
+          <td>0.601536</td>
           <td>1.000000</td>
           <td>0.0001</td>
         </tr>
         <tr>
           <th>3</th>
           <td>disconnected_cliques</td>
-          <td>0.980277</td>
+          <td>0.978549</td>
           <td>0.000000</td>
           <td>0.0001</td>
         </tr>
         <tr>
           <th>4</th>
           <td>fractal_hierarchy</td>
-          <td>0.768027</td>
+          <td>0.767801</td>
           <td>1.000000</td>
           <td>0.0001</td>
         </tr>
@@ -394,7 +535,7 @@ We can replicate this experiment for all structures in our structure zoo
 
 
 
-.. image:: output_27_0.png
+.. image:: output_28_0.png
 
 
 Models Profiling
@@ -409,6 +550,43 @@ grid to the random network
 
     detail_evolution = zoo.sort_spatial_WS(500).scores(m=500*5,epsilons=np.logspace(-4,0,6),scores=scoring.get_default_scores(),latex_names=True)
     #detail_evolution = toolBox.scores_for_rank_functions({"spatialWS":zoo.sort_spatial_WS},500,500*5,epsilons=np.logspace(-4,0,6),scores=toolBox.get_all_scores())
+
+
+
+.. parsed-literal::
+
+    eps=0.0001: runs:   0%|          | 0/1 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    eps=0.0006: runs:   0%|          | 0/1 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    eps=0.004: runs:   0%|          | 0/1 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    eps=0.0251: runs:   0%|          | 0/1 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    eps=0.1585: runs:   0%|          | 0/1 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    eps=1.0: runs:   0%|          | 0/1 [00:00<?, ?it/s]
+
 
 .. code:: ipython3
 
@@ -439,7 +617,7 @@ grid to the random network
           <th></th>
           <th>name</th>
           <th>$CC(G)$</th>
-          <th>$\overline{(CC(u))}$</th>
+          <th>$\overline{CC(u)}$</th>
           <th>Core</th>
           <th>$\overline{d}$</th>
           <th>Rob</th>
@@ -456,15 +634,15 @@ grid to the random network
         <tr>
           <th>0</th>
           <td>model</td>
-          <td>0.666075</td>
-          <td>0.666182</td>
-          <td>0.200000</td>
-          <td>0.052702</td>
+          <td>0.665732</td>
+          <td>0.665667</td>
+          <td>0.183673</td>
+          <td>0.040898</td>
           <td>1.00</td>
           <td>1.0</td>
-          <td>0.777650</td>
-          <td>0.225802</td>
-          <td>0.000398</td>
+          <td>0.778950</td>
+          <td>0.225725</td>
+          <td>0.000794</td>
           <td>0.0</td>
           <td>0.0</td>
           <td>0.000100</td>
@@ -472,15 +650,15 @@ grid to the random network
         <tr>
           <th>1</th>
           <td>model</td>
-          <td>0.658702</td>
-          <td>0.660061</td>
-          <td>0.180000</td>
-          <td>0.128084</td>
+          <td>0.661046</td>
+          <td>0.661939</td>
+          <td>0.183673</td>
+          <td>0.089374</td>
           <td>0.98</td>
           <td>1.0</td>
-          <td>0.774826</td>
-          <td>0.225668</td>
-          <td>0.007318</td>
+          <td>0.772301</td>
+          <td>0.242511</td>
+          <td>0.005831</td>
           <td>0.0</td>
           <td>0.0</td>
           <td>0.000631</td>
@@ -488,15 +666,15 @@ grid to the random network
         <tr>
           <th>2</th>
           <td>model</td>
-          <td>0.627496</td>
-          <td>0.632591</td>
+          <td>0.625780</td>
+          <td>0.630609</td>
           <td>0.160000</td>
-          <td>0.209159</td>
+          <td>0.198494</td>
           <td>0.98</td>
           <td>1.0</td>
-          <td>0.759227</td>
-          <td>0.240701</td>
-          <td>0.026304</td>
+          <td>0.756816</td>
+          <td>0.222311</td>
+          <td>0.028706</td>
           <td>0.0</td>
           <td>0.0</td>
           <td>0.003981</td>
@@ -504,15 +682,15 @@ grid to the random network
         <tr>
           <th>3</th>
           <td>model</td>
-          <td>0.463373</td>
-          <td>0.481762</td>
+          <td>0.460102</td>
+          <td>0.479636</td>
           <td>0.140000</td>
-          <td>0.360342</td>
+          <td>0.364194</td>
           <td>0.98</td>
           <td>1.0</td>
-          <td>0.655072</td>
-          <td>0.235776</td>
-          <td>0.076439</td>
+          <td>0.650330</td>
+          <td>0.236926</td>
+          <td>0.077696</td>
           <td>0.0</td>
           <td>0.0</td>
           <td>0.025119</td>
@@ -520,15 +698,15 @@ grid to the random network
         <tr>
           <th>4</th>
           <td>model</td>
-          <td>0.106766</td>
-          <td>0.120491</td>
+          <td>0.107233</td>
+          <td>0.117139</td>
           <td>0.142857</td>
-          <td>0.484737</td>
+          <td>0.484675</td>
           <td>0.98</td>
           <td>1.0</td>
-          <td>0.256430</td>
-          <td>0.152290</td>
-          <td>0.150846</td>
+          <td>0.243960</td>
+          <td>0.163707</td>
+          <td>0.153446</td>
           <td>0.0</td>
           <td>0.0</td>
           <td>0.158489</td>
@@ -536,15 +714,15 @@ grid to the random network
         <tr>
           <th>5</th>
           <td>model</td>
-          <td>0.019009</td>
-          <td>0.020193</td>
-          <td>0.140000</td>
-          <td>0.515918</td>
+          <td>0.020882</td>
+          <td>0.020709</td>
+          <td>0.122449</td>
+          <td>0.512133</td>
           <td>0.98</td>
           <td>1.0</td>
-          <td>0.000000</td>
-          <td>0.071727</td>
-          <td>0.174057</td>
+          <td>0.011905</td>
+          <td>0.073875</td>
+          <td>0.184929</td>
           <td>0.0</td>
           <td>0.0</td>
           <td>1.000000</td>
@@ -561,7 +739,7 @@ grid to the random network
 
 
 
-.. image:: output_31_0.png
+.. image:: output_32_0.png
 
 
 We can also compare properties of a set of models
@@ -575,13 +753,20 @@ In this case, we plot all models in Structify’s Zoo, with
     n,m=128,128*8
     detail_evolution = scoring.scores_for_rank_models(zoo.get_all_rank_models(n,m),m,epsilons=0,latex_names=True)
 
+
+
+.. parsed-literal::
+
+    eps=0.0: runs:   0%|          | 0/1 [00:00<?, ?it/s]
+
+
 .. code:: ipython3
 
     viz.spider_plot(detail_evolution,reference=0)
 
 
 
-.. image:: output_34_0.png
+.. image:: output_35_0.png
 
 
 Comparing with an observed network
@@ -599,7 +784,7 @@ Zackary karate club graph
 
 
 
-.. image:: output_36_0.png
+.. image:: output_37_0.png
 
 
 Generate graphs of the same size
@@ -631,9 +816,71 @@ parameterized with the number of blocks.
     compare_scores = scoring.scores_for_rank_models(models_to_compare,m,epsilons=epsilons,runs=20)
 
 
+
 .. parsed-literal::
 
-                                                                     
+    Epsilon:   0%|          | 0/10 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/20 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/20 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/20 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/20 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/20 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/20 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/20 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/20 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/20 [00:00<?, ?it/s]
+
+
+
+.. parsed-literal::
+
+    Run:   0%|          | 0/20 [00:00<?, ?it/s]
+
 
 Comparing
 ^^^^^^^^^
@@ -654,7 +901,7 @@ models’ similarity evolve as a function of the random parameter
 
 
 
-.. image:: output_42_0.png
+.. image:: output_43_0.png
 
 
 Details of models matching
@@ -717,87 +964,87 @@ those selected models, with the properties of our graph for comparison
         <tr>
           <th>0</th>
           <td>fractal_hierarchy</td>
-          <td>0.230491</td>
-          <td>0.481793</td>
-          <td>0.445833</td>
-          <td>0.929937</td>
-          <td>0.437</td>
-          <td>0.985294</td>
-          <td>0.018285</td>
-          <td>0.392298</td>
-          <td>0.323003</td>
+          <td>0.230688</td>
+          <td>0.489009</td>
+          <td>0.407639</td>
+          <td>0.913731</td>
+          <td>0.373</td>
+          <td>0.994118</td>
+          <td>0.051910</td>
+          <td>0.395944</td>
+          <td>0.321757</td>
           <td>0.000000</td>
-          <td>0.152576</td>
+          <td>0.189563</td>
           <td>0.215443</td>
-          <td>1.076460</td>
+          <td>0.987277</td>
         </tr>
         <tr>
           <th>1</th>
           <td>fractal_root</td>
-          <td>0.469879</td>
-          <td>0.698111</td>
-          <td>0.410417</td>
-          <td>0.536371</td>
-          <td>0.374</td>
+          <td>0.435860</td>
+          <td>0.609586</td>
+          <td>0.415972</td>
+          <td>0.545049</td>
+          <td>0.420</td>
           <td>1.000000</td>
-          <td>0.331491</td>
-          <td>0.496156</td>
-          <td>0.265743</td>
-          <td>0.030529</td>
-          <td>0.460243</td>
-          <td>0.046416</td>
-          <td>1.169814</td>
+          <td>0.311289</td>
+          <td>0.498237</td>
+          <td>0.265365</td>
+          <td>0.020336</td>
+          <td>0.283346</td>
+          <td>0.100000</td>
+          <td>1.147348</td>
         </tr>
         <tr>
           <th>2</th>
           <td>maximal_stars</td>
-          <td>0.219264</td>
-          <td>0.412788</td>
-          <td>0.427083</td>
-          <td>0.854133</td>
-          <td>0.430</td>
+          <td>0.211125</td>
+          <td>0.372338</td>
+          <td>0.438095</td>
+          <td>0.873728</td>
+          <td>0.399</td>
           <td>0.969118</td>
+          <td>0.000447</td>
+          <td>0.296832</td>
+          <td>0.427738</td>
           <td>0.000000</td>
-          <td>0.277663</td>
-          <td>0.423810</td>
-          <td>0.000000</td>
-          <td>0.032069</td>
+          <td>0.030015</td>
           <td>0.464159</td>
-          <td>1.239858</td>
+          <td>1.283043</td>
         </tr>
         <tr>
           <th>3</th>
           <td>core_distance</td>
-          <td>0.306555</td>
-          <td>0.364385</td>
-          <td>0.525298</td>
-          <td>0.674693</td>
-          <td>0.470</td>
-          <td>0.932353</td>
+          <td>0.316464</td>
+          <td>0.318343</td>
+          <td>0.536806</td>
+          <td>0.637247</td>
+          <td>0.520</td>
+          <td>0.926471</td>
           <td>0.000000</td>
-          <td>0.293278</td>
-          <td>0.473840</td>
+          <td>0.281354</td>
+          <td>0.471294</td>
           <td>0.000000</td>
-          <td>0.000851</td>
+          <td>0.000000</td>
           <td>0.464159</td>
-          <td>1.288921</td>
+          <td>1.488585</td>
         </tr>
         <tr>
           <th>4</th>
           <td>fractal_star</td>
-          <td>0.116625</td>
-          <td>0.184110</td>
-          <td>0.447222</td>
-          <td>0.810483</td>
-          <td>0.540</td>
-          <td>0.979412</td>
+          <td>0.113795</td>
+          <td>0.183118</td>
+          <td>0.414583</td>
+          <td>0.820181</td>
+          <td>0.500</td>
+          <td>0.983824</td>
+          <td>0.000817</td>
+          <td>0.310862</td>
+          <td>0.355246</td>
           <td>0.000000</td>
-          <td>0.312917</td>
-          <td>0.357859</td>
-          <td>0.000000</td>
-          <td>0.035023</td>
+          <td>0.004940</td>
           <td>0.464159</td>
-          <td>1.557953</td>
+          <td>1.622282</td>
         </tr>
       </tbody>
     </table>
@@ -817,7 +1064,7 @@ those selected models, with the properties of our graph for comparison
 
 
 
-.. image:: output_47_0.png
+.. image:: output_48_0.png
 
 
 
