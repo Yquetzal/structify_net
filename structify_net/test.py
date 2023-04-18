@@ -329,11 +329,6 @@ def coreness(graph,normalized=True):
 
 
 
-
-
-
-
-
 def compare_graphs(df_reference,df_graphs,best_by_name=False,score_difference=False):
     """Compares a list of graphs to a reference graph
     
@@ -379,10 +374,43 @@ def compare_graphs(df_reference,df_graphs,best_by_name=False,score_difference=Fa
         
     return df_to_return
 
+def get_default_scores(with_size=False,latex_names=True):
+    """Returns the default scores
+    
+    Returns a dictionary of scores such as {name:score} 
+    
+    Args:
+        with_size (bool, optional): If True, the size of the graph is added to the scores. Defaults to False.
+        latex_names (bool, optional): If True, the names of the scores are latex formulas. Defaults to False.
+    
+    Returns:
+        _type_: A dictionary of scores such as {name:score}
+    
+    """
+    if with_size:
+        return default_scores|size
 
+    if latex_names:
+        return _names2latex(default_scores)
+    return default_scores
 
+def _names2latex_list(scores):
+    to_return = []
+    for k in scores:
+        if k in score_names:
+            to_return.append(score_names[k])
+        else:
+            to_return.append(k)
+    return to_return
 
-
+def _names2latex(scores):
+    to_return = {}
+    for k,v in scores.items():
+        if k in score_names:
+            to_return[score_names[k]]=v
+        else:
+            to_return[k]=v
+    return to_return
 
 default_scores = {"transitivity":transitivity,"average_clustering":average_clustering,"coreness":coreness,"average_shortest_path_length":average_shortest_path_length,"robustness":robustness,"giant_component_ratio":giant_component_ratio,"modularity":modularity,"boundaries":boundaries,"degree_heterogeneity":degree_heterogeneity,"degree_assortativity":degree_assortativity,"hierarchy":hierarchy}
 
