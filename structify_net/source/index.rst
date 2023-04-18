@@ -32,8 +32,9 @@ This library also contains a set of tools to visualize and score the resulting n
 
    self
    Classes
-   Zoo
-   Visualization
+..Visualization
+..Zoo
+   
 .. Scoring
 .. Tutorial/Tutorial
 
