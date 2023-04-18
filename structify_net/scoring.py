@@ -419,7 +419,6 @@ def scores_for_rank_models(rank_models,m,scores=None,epsilons=0,runs=1,details=F
     for eps in (pbar := tqdm(epsilons, desc="Epsilon: ",position=0,leave=False)):
     #for eps in epsilons:
         pbar.set_description(f"Epsilon: {round(eps,4)}")
-        global_name="eps="+str(round(float(eps),4))+": "
         for name,rank_model in rank_models.items():
             all_generators[name]=rank_model.get_generator(eps,m=m)
         df_alpha = scores_for_generators(all_generators,scores=scores,runs=runs,details=details,latex_names=latex_names)
