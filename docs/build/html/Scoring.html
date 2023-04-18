@@ -20,7 +20,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="structify_net.scoring.has_giant_component" href="generated/structify_net.scoring.has_giant_component.html" />
+    <link rel="next" title="Introduction to Structify-Net" href="Tutorial/Tutorial.html" />
     <link rel="prev" title="structify_net.viz.spider_plot" href="generated/structify_net.viz.spider_plot.html" /> 
 </head>
 
@@ -48,35 +48,7 @@
 <li class="toctree-l1"><a class="reference internal" href="Classes.html">Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Zoo.html">Structure Zoo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Visualization.html">Visualization</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Scoring</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#individual-scoring-functions">Individual scoring functions</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="generated/structify_net.scoring.has_giant_component.html">structify_net.scoring.has_giant_component</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/structify_net.scoring.giant_component_ratio.html">structify_net.scoring.giant_component_ratio</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/structify_net.scoring.transitivity.html">structify_net.scoring.transitivity</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/structify_net.scoring.average_clustering.html">structify_net.scoring.average_clustering</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/structify_net.scoring.average_shortest_path_length.html">structify_net.scoring.average_shortest_path_length</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/structify_net.scoring.modularity.html">structify_net.scoring.modularity</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/structify_net.scoring.degree_heterogeneity.html">structify_net.scoring.degree_heterogeneity</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/structify_net.scoring.is_degree_heterogeneous.html">structify_net.scoring.is_degree_heterogeneous</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/structify_net.scoring.robustness.html">structify_net.scoring.robustness</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/structify_net.scoring.degree_assortativity.html">structify_net.scoring.degree_assortativity</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/structify_net.scoring.hierarchy.html">structify_net.scoring.hierarchy</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/structify_net.scoring.boundaries.html">structify_net.scoring.boundaries</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/structify_net.scoring.coreness.html">structify_net.scoring.coreness</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#useful-functions">Useful functions</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="generated/structify_net.scoring.compute_all_scores.html">structify_net.scoring.compute_all_scores</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/structify_net.scoring.scores_for_graphs.html">structify_net.scoring.scores_for_graphs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/structify_net.scoring.scores_for_generators.html">structify_net.scoring.scores_for_generators</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/structify_net.scoring.scores_for_rank_models.html">structify_net.scoring.scores_for_rank_models</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/structify_net.scoring.scores_for_rank_functions.html">structify_net.scoring.scores_for_rank_functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/structify_net.scoring.compare_graphs.html">structify_net.scoring.compare_graphs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/structify_net.scoring.get_default_scores.html">structify_net.scoring.get_default_scores</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Scoring</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Tutorial/Tutorial.html">Introduction to Structify-Net</a></li>
 </ul>
 
@@ -106,88 +78,6 @@
              
   <section id="scoring">
 <h1>Scoring<a class="headerlink" href="#scoring" title="Permalink to this heading"></a></h1>
-<p>The scoring submodule contains a collection of scoring function to describe graphs. The scoring function are used to compare graphs.</p>
-<p>The scoring function are defined in the <code class="xref py py-mod docutils literal notranslate"><span class="pre">scoring</span></code> module.</p>
-<ul class="simple">
-<li><p><code class="xref py py-data docutils literal notranslate"><span class="pre">scoring.default_scores</span></code>: contains all available scores in a dictionary {name: score}.</p></li>
-<li><p><code class="xref py py-data docutils literal notranslate"><span class="pre">scoring.size</span></code>: contains additional scores describing the size of the graphs (number of nodes, number of edges)</p></li>
-<li><p><code class="xref py py-data docutils literal notranslate"><span class="pre">scoring.score_names</span></code>: contains a dictionary to convert plain score names to short latex names.</p></li>
-</ul>
-<p>The function <a class="reference internal" href="generated/structify_net.scoring.get_default_scores.html#structify_net.scoring.get_default_scores" title="structify_net.scoring.get_default_scores"><code class="xref py py-func docutils literal notranslate"><span class="pre">scoring.get_default_scores()</span></code></a> return the default_scores in a convenient way, see below</p>
-<section id="individual-scoring-functions">
-<h2>Individual scoring functions<a class="headerlink" href="#individual-scoring-functions" title="Permalink to this heading"></a></h2>
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/structify_net.scoring.has_giant_component.html#structify_net.scoring.has_giant_component" title="structify_net.scoring.has_giant_component"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scoring.has_giant_component</span></code></a>(graph[, threshold])</p></td>
-<td><p>Check if the graph has a giant component</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/structify_net.scoring.giant_component_ratio.html#structify_net.scoring.giant_component_ratio" title="structify_net.scoring.giant_component_ratio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scoring.giant_component_ratio</span></code></a>(graph)</p></td>
-<td><p>Ratio of the largest component to the total number of nodes</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/structify_net.scoring.transitivity.html#structify_net.scoring.transitivity" title="structify_net.scoring.transitivity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scoring.transitivity</span></code></a>(graph)</p></td>
-<td><p>Transitivity of the graph</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/structify_net.scoring.average_clustering.html#structify_net.scoring.average_clustering" title="structify_net.scoring.average_clustering"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scoring.average_clustering</span></code></a>(graph)</p></td>
-<td><p>Average clustering coefficient of the graph</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/structify_net.scoring.average_shortest_path_length.html#structify_net.scoring.average_shortest_path_length" title="structify_net.scoring.average_shortest_path_length"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scoring.average_shortest_path_length</span></code></a>(graph)</p></td>
-<td><p>The average shortest path length of the graph</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/structify_net.scoring.modularity.html#structify_net.scoring.modularity" title="structify_net.scoring.modularity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scoring.modularity</span></code></a>(graph[, normalized])</p></td>
-<td><p>Returns the modularity of the graph</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/structify_net.scoring.degree_heterogeneity.html#structify_net.scoring.degree_heterogeneity" title="structify_net.scoring.degree_heterogeneity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scoring.degree_heterogeneity</span></code></a>(graph)</p></td>
-<td><p>Compute the degree heterogeneity of the graph</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/structify_net.scoring.is_degree_heterogeneous.html#structify_net.scoring.is_degree_heterogeneous" title="structify_net.scoring.is_degree_heterogeneous"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scoring.is_degree_heterogeneous</span></code></a>(graph)</p></td>
-<td><p>Returns True if the graph is degree heterogeneous, False otherwise</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/structify_net.scoring.robustness.html#structify_net.scoring.robustness" title="structify_net.scoring.robustness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scoring.robustness</span></code></a>(graph)</p></td>
-<td><p>Robustness of the graph</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/structify_net.scoring.degree_assortativity.html#structify_net.scoring.degree_assortativity" title="structify_net.scoring.degree_assortativity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scoring.degree_assortativity</span></code></a>(graph[, ...])</p></td>
-<td><p>Degree assortativity coefficient of the graph</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/structify_net.scoring.hierarchy.html#structify_net.scoring.hierarchy" title="structify_net.scoring.hierarchy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scoring.hierarchy</span></code></a>(graph[, normalized, ...])</p></td>
-<td><p>Hierarchy of the graph</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/structify_net.scoring.boundaries.html#structify_net.scoring.boundaries" title="structify_net.scoring.boundaries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scoring.boundaries</span></code></a>(graph[, normalized])</p></td>
-<td><p>Boundaries of the graph</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/structify_net.scoring.coreness.html#structify_net.scoring.coreness" title="structify_net.scoring.coreness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scoring.coreness</span></code></a>(graph[, normalized])</p></td>
-<td><p>Coreness of the graph</p></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="useful-functions">
-<h2>Useful functions<a class="headerlink" href="#useful-functions" title="Permalink to this heading"></a></h2>
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/structify_net.scoring.compute_all_scores.html#structify_net.scoring.compute_all_scores" title="structify_net.scoring.compute_all_scores"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scoring.compute_all_scores</span></code></a>(graph)</p></td>
-<td><p>Compute all scores for a graph</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/structify_net.scoring.scores_for_graphs.html#structify_net.scoring.scores_for_graphs" title="structify_net.scoring.scores_for_graphs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scoring.scores_for_graphs</span></code></a>(graphs[, scores, ...])</p></td>
-<td><p>Compute scores for a list of graphs</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/structify_net.scoring.scores_for_generators.html#structify_net.scoring.scores_for_generators" title="structify_net.scoring.scores_for_generators"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scoring.scores_for_generators</span></code></a>(generators[, ...])</p></td>
-<td><p>Scores for a list of generators</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/structify_net.scoring.scores_for_rank_models.html#structify_net.scoring.scores_for_rank_models" title="structify_net.scoring.scores_for_rank_models"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scoring.scores_for_rank_models</span></code></a>(rank_models, m)</p></td>
-<td><p>Scores for a list of rank models</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/structify_net.scoring.scores_for_rank_functions.html#structify_net.scoring.scores_for_rank_functions" title="structify_net.scoring.scores_for_rank_functions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scoring.scores_for_rank_functions</span></code></a>(...[, ...])</p></td>
-<td><p>Scores for a list of rank functions</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/structify_net.scoring.compare_graphs.html#structify_net.scoring.compare_graphs" title="structify_net.scoring.compare_graphs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scoring.compare_graphs</span></code></a>(df_reference, df_graphs)</p></td>
-<td><p>Compares a list of graphs to a reference graph</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/structify_net.scoring.get_default_scores.html#structify_net.scoring.get_default_scores" title="structify_net.scoring.get_default_scores"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scoring.get_default_scores</span></code></a>([with_size, ...])</p></td>
-<td><p>Returns the default scores</p></td>
-</tr>
-</tbody>
-</table>
-</section>
 </section>
 
 
@@ -195,7 +85,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="generated/structify_net.viz.spider_plot.html" class="btn btn-neutral float-left" title="structify_net.viz.spider_plot" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="generated/structify_net.scoring.has_giant_component.html" class="btn btn-neutral float-right" title="structify_net.scoring.has_giant_component" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Tutorial/Tutorial.html" class="btn btn-neutral float-right" title="Introduction to Structify-Net" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
