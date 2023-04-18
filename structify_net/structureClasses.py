@@ -3,6 +3,7 @@ import numpy as np
 from scipy.special import comb
 import networkx as nx
 import structify_net.viz as viz
+import structify_net.scoring as scoring
 import structify_net as stn
 import structify_net.transform as transform
 
@@ -58,7 +59,7 @@ class Graph_generator:
         Returns:
             _type_: a matplotlib plot
         """
-        return viz.plot_proba_function(self,ax=ax)
+        return viz._plot_proba_function(self,ax=ax)
     
     def scores(self,scores=None,runs=1,details=False,latex_names=True):
         """return a score dataframe for this generator
@@ -111,7 +112,7 @@ class Rank_model:
         Returns:
             _type_: _description_
         """
-        probas=stn.rank2proba(self,epsilon,density,m)
+        probas=transform._rank2proba(self,epsilon,density,m)
         return Graph_generator(self, probas)
 
     def plot_matrix(self,nodeOrder=None,ax=None):
@@ -125,7 +126,7 @@ class Rank_model:
         """
         if nodeOrder==None:
             nodeOrder=self.node_order
-        viz.plot_rank_matrix(self,nodeOrder=nodeOrder,ax=ax)
+        viz._plot_rank_matrix(self,nodeOrder=nodeOrder,ax=ax)
         
     def generate_graph(self,epsilon,density=None,m=None):
         """Generate a graph from this rank model
@@ -158,5 +159,5 @@ class Rank_model:
         Returns:
             _type_: _description_
         """
-        return stn.scores_for_rank_models(self,m,scores=scores,epsilons=epsilons,runs=runs,details=details,latex_names=latex_names)
+        return scoring.scores_for_rank_models(self,m,scores=scores,epsilons=epsilons,runs=runs,details=details,latex_names=latex_names)
         

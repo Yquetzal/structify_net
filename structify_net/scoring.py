@@ -6,8 +6,7 @@ from scipy.stats import spearmanr
 import pandas as pd
 from structify_net.structureClasses import Rank_model, Graph_generator
 import numbers
-from tqdm import tqdm
-
+from tqdm.auto import tqdm
 
 
 def _largest_component(graph):
@@ -363,7 +362,9 @@ def scores_for_graphs(graphs,scores=None,latex_names=True):
         cols=_names2latex_list(cols)
         df.columns=cols
     return(df)
-global_name = ""
+
+
+
 
 def scores_for_generators(generators,scores=None,runs=1,details=False,latex_names=True):
     """Scores for a list of generators
@@ -378,9 +379,8 @@ def scores_for_generators(generators,scores=None,runs=1,details=False,latex_name
     Returns:
         _type_: _description_
     """
-    global global_name
     to_return = pd.DataFrame()
-    for i in tqdm(range(runs),desc=global_name+"runs",leave=False, position=0,):
+    for i in tqdm(range(runs),desc="Run",leave=False, position=0,):
         graphs = {name:generator.generate() for name,generator in generators.items()}
         results= scores_for_graphs(graphs,scores=scores,latex_names=latex_names)
         to_return = pd.concat([to_return,results])
@@ -406,7 +406,6 @@ def scores_for_rank_models(rank_models,m,scores=None,epsilons=0,runs=1,details=F
     Returns:
         _type_: dataframe with the scores
     """
-    global global_name
     all_generators={}
     if not isinstance(rank_models,dict):
         rank_models = {"model":rank_models}
@@ -416,9 +415,10 @@ def scores_for_rank_models(rank_models,m,scores=None,epsilons=0,runs=1,details=F
         else:
             epsilons=[0]+list(np.logspace(-4,0,epsilons-1))
     all_dfs=[]
-    #for eps in tqdm(epsilons, desc="Epsilons",position=,leave=False):
-    for eps in epsilons:
-        global_name="eps="+eps.round(4).astype(str)+": "
+    for eps in (pbar := tqdm(epsilons, desc="Epsilon: ",position=0,leave=False)):
+    #for eps in epsilons:
+        pbar.set_description(f"Epsilon: {round(eps,4)}")
+        global_name="eps="+str(round(float(eps),4))+": "
         for name,rank_model in rank_models.items():
             all_generators[name]=rank_model.get_generator(eps,m=m)
         df_alpha = scores_for_generators(all_generators,scores=scores,runs=runs,details=details,latex_names=latex_names)
@@ -501,7 +501,7 @@ def compare_graphs(df_reference,df_graphs,best_by_name=False,score_difference=Fa
         
     return df_to_return
 
-def get_default_scores(with_size=False,latex_names=False):
+def get_default_scores(with_size=False,latex_names=True):
     """Returns the default scores
     
     Returns a dictionary of scores such as {name:score} 
