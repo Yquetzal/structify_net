@@ -17,30 +17,30 @@ The function :func:`zoo.get_all_rank_models` return instanciated models. See det
 
 
 
-.. Individual models
-.. -----------------
+Individual models
+-----------------
 
-.. .. autosummary::
-..    :toctree: generated/
+.. autosummary::
+   :toctree: generated/
 
-..    zoo.sort_distances
-..    zoo.sort_blocks_assortative
-..    zoo.sort_overlap_communities
-..    zoo.ER_generator
-..    zoo.sort_largest_disconnected_cliques
-..    zoo.sort_stars
-..    zoo.sort_core_distance
-..    zoo.sort_spatial_WS
-..    zoo.sort_fractal_leaves
-..    zoo.sort_fractal_root
-..    zoo.sort_nestedness
-..    zoo.sort_fractal_hierarchical
-..    zoo.sort_fractal_star
+   zoo.sort_distances
+   zoo.sort_blocks_assortative
+   zoo.sort_overlap_communities
+   zoo.ER_generator
+   zoo.sort_largest_disconnected_cliques
+   zoo.sort_stars
+   zoo.sort_core_distance
+   zoo.sort_spatial_WS
+   zoo.sort_fractal_leaves
+   zoo.sort_fractal_root
+   zoo.sort_nestedness
+   zoo.sort_fractal_hierarchical
+   zoo.sort_fractal_star
    
 
-.. function to get instanciated model collections
-.. ----------------------------------------------
-.. .. autosummary::
-..    :toctree: generated/
+function to get instanciated model collections
+----------------------------------------------
+.. autosummary::
+   :toctree: generated/
 
-..    zoo.get_all_rank_models
+   zoo.get_all_rank_models
