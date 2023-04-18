@@ -38,9 +38,9 @@ Individual models
    .. zoo.sort_fractal_star
    
 
-function to get instanciated model collections
-----------------------------------------------
-.. autosummary::
-   :toctree: generated/
+.. function to get instanciated model collections
+.. ----------------------------------------------
+.. .. autosummary::
+..    :toctree: generated/
 
-   zoo.get_all_rank_models
+..    zoo.get_all_rank_models
