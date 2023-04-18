@@ -1,7 +1,7 @@
 Structure Zoo
 ==================
 
-.. currentmodule:: structify_net
+.. .. currentmodule:: structify_net
 
 .. The structure zoo is a collection of structures. It contains both classic ones such as bloc structures, spatial structures or Watts-Strogatz structures, and less common ones. The zoo is a good place to start if you want to learn about the different types of structures that can be created with the library.
 
@@ -15,13 +15,13 @@ Structure Zoo
 .. The function :func:`zoo.get_all_rank_models` return instanciated models. See details below.
 
 
-Individual models
------------------
+.. Individual models
+.. -----------------
 
-.. autosummary::
-   :toctree: generated/
+.. .. autosummary::
+..    :toctree: generated/
 
-   zoo.sort_distances
+..    zoo.sort_distances
 ..    zoo.sort_blocks_assortative
 ..    zoo.sort_overlap_communities
 ..    zoo.sort_largest_disconnected_cliques
