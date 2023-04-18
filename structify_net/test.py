@@ -1,4 +1,14 @@
-
+import math
+import networkx as nx
+import numpy as np
+import scipy
+#from scipy.stats import spearmanr
+import pandas as pd
+import structify_net as stn
+#from structify_net.structureClasses import Rank_model, Graph_generator
+import numbers
+#from tqdm.auto import tqdm
+import tqdm
 
 def has_giant_component(graph,threshold=0.9):
     """Check if the graph has a giant component
