@@ -22,7 +22,7 @@ Individual scoring functions
 .. autosummary::
    :toctree: generated/
 
-   scoring.has_giant_component
+   test.has_giant_component
 ..    scoring.giant_component_ratio
 ..    scoring.transitivity
 ..    scoring.average_clustering

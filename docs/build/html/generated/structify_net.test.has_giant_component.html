@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>structify_net.scoring.has_giant_component &mdash; structify_net 2 documentation</title>
+  <title>structify_net.test.has_giant_component &mdash; structify_net 2 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -19,7 +19,9 @@
         <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Introduction to Structify-Net" href="../Tutorial/Tutorial.html" />
+    <link rel="prev" title="Scoring" href="../Scoring.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -41,12 +43,21 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Welcome to Structify_net’s documentation!</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Classes.html">Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Zoo.html">Structure Zoo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Visualization.html">Visualization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Scoring.html">Scoring</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../Scoring.html">Scoring</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../Scoring.html#individual-scoring-functions">Individual scoring functions</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">structify_net.test.has_giant_component</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#structify_net.test.has_giant_component"><code class="docutils literal notranslate"><span class="pre">has_giant_component()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../Tutorial/Tutorial.html">Introduction to Structify-Net</a></li>
 </ul>
 
@@ -64,9 +75,10 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">structify_net.scoring.has_giant_component</li>
+          <li class="breadcrumb-item"><a href="../Scoring.html">Scoring</a></li>
+      <li class="breadcrumb-item active">structify_net.test.has_giant_component</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/generated/structify_net.scoring.has_giant_component.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/generated/structify_net.test.has_giant_component.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -74,11 +86,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="structify-net-scoring-has-giant-component">
-<h1>structify_net.scoring.has_giant_component<a class="headerlink" href="#structify-net-scoring-has-giant-component" title="Permalink to this heading"></a></h1>
+  <section id="structify-net-test-has-giant-component">
+<h1>structify_net.test.has_giant_component<a class="headerlink" href="#structify-net-test-has-giant-component" title="Permalink to this heading"></a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="structify_net.scoring.has_giant_component">
-<span class="sig-prename descclassname"><span class="pre">structify_net.scoring.</span></span><span class="sig-name descname"><span class="pre">has_giant_component</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#structify_net.scoring.has_giant_component" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="structify_net.test.has_giant_component">
+<span class="sig-prename descclassname"><span class="pre">structify_net.test.</span></span><span class="sig-name descname"><span class="pre">has_giant_component</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#structify_net.test.has_giant_component" title="Permalink to this definition"></a></dt>
 <dd><p>Check if the graph has a giant component</p>
 <p>Returns True if the ratio of the largest component to the total number of nodes is above the threshold</p>
 <dl class="simple">
@@ -95,7 +107,10 @@ threshold (float, optional): The threshold. Defaults to 0.9.</p>
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../Scoring.html" class="btn btn-neutral float-left" title="Scoring" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../Tutorial/Tutorial.html" class="btn btn-neutral float-right" title="Introduction to Structify-Net" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
