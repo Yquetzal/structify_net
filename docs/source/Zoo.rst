@@ -26,7 +26,6 @@ Individual models
    zoo.sort_distances
    zoo.sort_blocks_assortative
    zoo.sort_overlap_communities
-   structify_net.zoo.ER_generator
    zoo.sort_largest_disconnected_cliques
    zoo.sort_stars
    zoo.sort_core_distance
@@ -37,7 +36,6 @@ Individual models
    zoo.sort_fractal_hierarchical
    zoo.sort_fractal_star
    
-
 function to get instanciated model collections
 ----------------------------------------------
  .. autosummary::

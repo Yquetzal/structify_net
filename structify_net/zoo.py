@@ -4,7 +4,7 @@ import random
 import math
 import networkx as nx
 import numpy as np
-from structify_net.structureClasses import Rank_model, Graph_generator
+import structify_net as stn
 
 #We can choose the number of dimensions
 #Add random positions in [0,1] in d dimensions, with names d1, d2, etc. to nodes
@@ -35,31 +35,31 @@ def sort_ER(nodes):
         g=nodes
     order = list(itertools.combinations(g.nodes,2))
     random.shuffle(order)
-    return Rank_model(order,g)
+    return stn.Rank_model(order,g)
 
-def ER_generator(n,m=None,p=None):
-    """Return a graph generator based on the Erdos-Renyi model
+# def ER_generator(n,m=None,p=None):
+#     """Return a graph generator based on the Erdos-Renyi model
 
-    Returns a graph generator based on the Erdos-Renyi model. The Erdos-Renyi model is a random graph model where each pair of nodes is connected with equal probability p. 
+#     Returns a graph generator based on the Erdos-Renyi model. The Erdos-Renyi model is a random graph model where each pair of nodes is connected with equal probability p. 
     
-    Either the number of edges m or the probability p must be specified. If both are specified, m takes precedence.
+#     Either the number of edges m or the probability p must be specified. If both are specified, m takes precedence.
     
-    Args:
-        n (_type_): number of nodes
-        m (_type_, optional): number of edges. Defaults to None.
-        p (_type_, optional): probability of an edge. Defaults to None.
+#     Args:
+#         n (_type_): number of nodes
+#         m (_type_, optional): number of edges. Defaults to None.
+#         p (_type_, optional): probability of an edge. Defaults to None.
 
-    Raises:
-        ValueError: _description_
+#     Raises:
+#         ValueError: _description_
         
-    Returns:
-        :class:`structify_net.Graph_generator`:: The corresponding graph generator
-    """
-    if m==None and p==None:
-        raise ValueError("Either m or p must be specified")
-    if m==None:
-        m=int(n*p)
-    Graph_generator.ER(n,m)
+#     Returns:
+#         :class:`structify_net.Graph_generator`:: The corresponding graph generator
+#     """
+#     if m==None and p==None:
+#         raise ValueError("Either m or p must be specified")
+#     if m==None:
+#         m=int(n*p)
+#     stn.Graph_generator.ER(n,m)
 
 
 def _assign_nominal_attributes(blocks,nb_nodes=None,g=None,name="block1"):
