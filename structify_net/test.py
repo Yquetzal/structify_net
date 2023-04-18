@@ -1,27 +1,20 @@
 
 
 def has_giant_component(graph,threshold=0.9):
-    """Check if the graph has a giant component
-    
-    Returns True if the ratio of the largest component to the total number of nodes is above the threshold
-
-    Args:
-        graph (nx.Graph): A graph
-        threshold (float, optional): The threshold. Defaults to 0.9.
-
-    Returns:
-        _type_: True if the graph has a giant component
+    """
+    Plot a matrix of the graph, ordered by nodePair_order
+    graph: a networkx graph
+    nodePair_order: a list of node pairs, from the most likely to the less likely
+    nodeOrder: a list of nodes, ordered by the order in which they should appear in the matrix
     """
     return giant_component_ratio(graph)>threshold
 
 def giant_component_ratio(graph):
-    """Ratio of the largest component to the total number of nodes
-
-    Args:
-        graph (nx.Graph): A graph
-
-    Returns:
-        _type_: _description_
+    """
+    Plot a matrix of the graph, ordered by nodePair_order
+    graph: a networkx graph
+    nodePair_order: a list of node pairs, from the most likely to the less likely
+    nodeOrder: a list of nodes, ordered by the order in which they should appear in the matrix
     """
     #nb_nodes=graph.number_of_nodes()
     #largest_CC= len(max(nx.connected_components(graph), key=len))
