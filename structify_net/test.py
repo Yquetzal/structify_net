@@ -1,5 +1,3 @@
-import numpy as np
-import networkx as nx
 
 
 def has_giant_component(graph,threshold=0.9):
