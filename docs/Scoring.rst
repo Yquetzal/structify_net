@@ -16,13 +16,13 @@ The scoring submodule contains a collection of scoring function to describe grap
 
 
 
-Individual scoring functions
-----------------------------
+.. Individual scoring functions
+.. ----------------------------
 
-.. autosummary::
-   :toctree: generated/
+.. .. autosummary::
+..    :toctree: generated/
 
-   test.has_giant_component
+..    test.has_giant_component
 ..    scoring.giant_component_ratio
 ..    scoring.transitivity
 ..    scoring.average_clustering
