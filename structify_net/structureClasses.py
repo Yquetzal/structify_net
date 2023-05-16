@@ -6,6 +6,9 @@ import structify_net.viz as viz
 import structify_net.scoring as scoring
 import structify_net as stn
 import structify_net.transform as transform
+import structify_net.zoo as zoo
+import random
+
 
 
 class Graph_generator:
@@ -13,6 +16,18 @@ class Graph_generator:
     
     This class instantiate graph generators. It is composed of a Rank Model Class, and a list of probabilites, such as the index of the probability in the list corresponds to the index of the edge in the rank model. 
     
+    Example of usage: 
+    
+    .. code-block:: python
+    
+        n=10
+        my_model = Rank_model(range(n),lambda u,v: u+v)
+        my_generator = my_model.get_generator(epsilon=0 ,m=30)
+        my_generator.plot_proba_function()
+        my_generator.plot_matrix()
+        g = my_generator.generate()
+        my_generator.scores(scores=[scoring.average_clustering,scoring.clustering],run=2)
+        
     Attributes:
         rank_model (_type_): A rank model
         sortedPairs (_type_): the node pairs, sorted from the most likely to the least likely to be connected, same as in the rank model
@@ -25,8 +40,9 @@ class Graph_generator:
             rank_model (_type_): A rank model
             probas (_type_): the probabilities of the edges in the rank model. Should be a list of the same length as the number of node pairs in the rank model
         """
-        self.rank_model=rank_model
+        
         self.sortedPairs=rank_model.sortedPairs
+        self.rank_model=rank_model
         self.probas=probas
     
     def generate(self):
@@ -49,7 +65,7 @@ class Graph_generator:
         """
         return transform._proba2graph(list(itertools.combinations(range(n),2)), [p]*scipy.special.comb(n,2,exact=True))
     
-    def plot_proba_function(self,ax=None):
+    def plot_proba_function(self,cumulative=False,ax=None):
         """Plot the probability function
         This function plots the probability function of the graph generator. It is a plot of the probability of an edge to exist as a function of the rank of the edge in the rank model.
 
@@ -59,8 +75,22 @@ class Graph_generator:
         Returns:
             _type_: a matplotlib plot
         """
-        return viz._plot_proba_function(self,ax=ax)
+        return viz._plot_proba_function(self,cumulative=cumulative,ax=ax)
     
+    def plot_matrix(self,nodeOrder=None,ax=None,**kwargs):
+        """Plot a matrix of the  graph generator
+        
+        The color of the cell is the probability to observe an edge between the two nodes.
+
+        Args:
+            nodeOrder (_type_, optional): the order in which the nodes should be plotted. Defaults to None.
+            ax (_type_, optional): an axis to plot on. Defaults to None.
+        """
+        if nodeOrder==None:
+            nodeOrder=self.rank_model.node_order
+        
+        viz._plot_matrix({self.sortedPairs[i]:self.probas[i] for i in range(len(self.probas))},nodeOrder,ax=ax,**kwargs)
+        
     def scores(self,scores=None,runs=1,details=False,latex_names=True):
         """return a score dataframe for this generator
 
@@ -82,23 +112,67 @@ class Rank_model:
     
     Node properties are useful to match the edge order with the structure, it can be used to store the spatial position of nodes or the community membership of nodes, for example.
     
+    Example of usage: 
+    
+    .. code-block:: python
+    
+        n=10
+        my_model = Rank_model(range(n),lambda u,v: u+v)
+        my_model.plot_matrix()
+        my_generator = my_model.get_generator(epsilon=0 ,m=30)
+        my_model.generate_graph(epsilon=0,m=30)
+    
+    
     Attributes:
         sortedPairs (_type_): A list of node pairs, ordered such as the first ones are the most likely to be connected
         node_properties (_type_, optional): node properties provided as networkx graph or dictionary. Defaults to None.
         node_order (_type_, optional): The order in which the nodes should be plotted in a plot matrix. Defaults to None.
     """
-    def __init__(self, sortedPairs, node_properties=None,node_order=None):
+    def _from_sorted_pairs(self, sortedPairs, node_properties=None,node_order=None):
         """ Initialize a rank model
+        
+        Special function to create a rank model directly from sortedPairs
+        
         Args:
             sortedPairs (_type_):  A list of node pairs, ordered such as the first ones are the most likely to be connected
             node_properties (_type_, optional): node properties provided as networkx graph or dictionary. Defaults to None.
             node_order (_type_, optional): The order in which the nodes should be plotted in a plot matrix. Defaults to None.
         """
-        self.sortedPairs=sortedPairs
+        
+        self.sortedPairs=[frozenset((u,v)) for u,v in sortedPairs]
         self.node_properties=node_properties
         self.node_order=node_order
+        if self.node_order==None:
+            self.node_order=list(set([u for u,v in self.sortedPairs]+[v for u,v in self.sortedPairs]))
+
+    def __init__(self, nodes, sort_function, sort_descendent=False,node_order_function=None):
+        """Initialize a rank model from a sort function, for given nodes
+
+        Args:
+            nodes (_type_): Nodes, provided as a networkx graph or a list of nodes. If a networkx graph is provided, node properties can be provided as node attributes
+            sort_function (_type_): a function that takes two nodes and the nodes as argument, and returns a score for the edge between the two nodes
+            sort_descendent (bool, optional): Whether to sort by descending values of the scoring function. Defaults to False.
+            node_order_function (_type_, optional): A function definiting an order on the nodes, for plotting. Defaults to None.
+        """
+        if not isinstance(nodes,nx.Graph):
+            g=zoo._n_to_graph(nodes)
+        else:
+            g=nodes
         
+        self.node_properties=g
+        
+        if node_order_function==None:
+            self.node_order=g.nodes
+        else:
+            self.node_order=node_order_function(nodes)
+
+        sorted_pairs=itertools.combinations(g.nodes,2)
     
+        sorted_pairs={(u,v):sort_function(u,v,nodes)+random.random()/1000 for u,v in sorted_pairs}
+        sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=sort_descendent)
+        self.sortedPairs=[frozenset((u,v)) for (u,v),_ in sorted_pairs]
+        #return stn.Rank_model([e[0] for e in sorted_pairs], g)
+        
     def get_generator(self,epsilon,density=None,m=None):
         """Return a graph generator for this rank model
         
@@ -115,7 +189,7 @@ class Rank_model:
         probas=transform._rank2proba(self,epsilon,density,m)
         return Graph_generator(self, probas)
 
-    def plot_matrix(self,nodeOrder=None,ax=None):
+    def plot_matrix(self,nodeOrder=None,ax=None,**kwargs):
         """Plot a matrix of the rank model
         
         Node pairs are ordered by rank. The color of the cell is the rank of the edge.
@@ -126,7 +200,7 @@ class Rank_model:
         """
         if nodeOrder==None:
             nodeOrder=self.node_order
-        viz._plot_rank_matrix(self,nodeOrder=nodeOrder,ax=ax)
+        viz._plot_rank_matrix(self,nodeOrder=nodeOrder,ax=ax,**kwargs)
         
     def generate_graph(self,epsilon,density=None,m=None):
         """Generate a graph from this rank model

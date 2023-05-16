@@ -163,7 +163,7 @@ def is_degree_heterogeneous(graph):
     reference_threshold = _gini_coefficient(np.random.poisson(avg_degree,len(graph.nodes)))
     power_law_threshold = _gini_coefficient(nx.utils.powerlaw_sequence(len(graph.nodes),3))
     #print("-",degree_heterogeneity(graph),reference_threshold,power_law_threshold)
-    return degree_heterogeneity(graph)>((reference_threshold+power_law_threshold)/2)
+    return degree_heterogeneity(graph)>((reference_threshold+power_law_threshold)/3)
 
 def _robustness_func(g:nx.Graph):
     nb_nodes=len(g.nodes)

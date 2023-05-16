@@ -45,6 +45,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Welcome to Structify_net’s documentation!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorial/Tutorial.html">Introduction to Structify_Net</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Classes.html">Classes</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../Zoo.html">Structure Zoo</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../Zoo.html#individual-models">Individual models</a><ul class="current">
@@ -71,7 +72,6 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../Visualization.html">Visualization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Scoring.html">Scoring</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Tutorial/Tutorial.html">Introduction to Structify-Net</a></li>
 </ul>
 
         </div>
@@ -105,7 +105,11 @@
 <dt class="sig sig-object py" id="structify_net.zoo.sort_core_distance">
 <span class="sig-prename descclassname"><span class="pre">structify_net.zoo.</span></span><span class="sig-name descname"><span class="pre">sort_core_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimensions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#structify_net.zoo.sort_core_distance" title="Permalink to this definition"></a></dt>
 <dd><p>Rank model based on the sum of the distance of their nodes to the center of the space.</p>
-<p>This is a proposition of a (continuous) core-periphery organization. Pairs of nodes are sorted according to the sum of the distance of their nodes to the center of the space.</p>
+<p>Core periphery structure is another well-known type of organization for complex systems. This organization is often modeled using blocks, one block being the dense core, another block, internally sparse, represent the periphery, and the density between the two blocks is set at an intermediate value. To illustrate the flexibility of the Rank approach, we propose a soft-core alternative, the coreness dissolving progressively into a periphery. To do so, we consider nodes embedded into a space, as for the spatial structure –random 1d positions by default. The node-pair rank score is computed as the inverse of the product of 3 distances: the distances from both nodes to the center, and the distance between the two nodes. As a consequence, when two nodes belong to the center, they are very likely to be connected; two nodes far from the center are unlikely to be connected, unless if they are extremely close from each other. 
+[
+R’(u,v)=d(W_u,W_v)d(W_u,mathbf{0})d(W_v,mathbf{0})
+]
+With $mathbf{0}$ the vector corresponding to the center of the location considered as the core of the space.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>nodes (_type_): Describe nodes. Can be either a networkx graph (node names and node attributes are preserved) or an integer (number of nodes)
 dimensions (int, optional): Number of dimensions. Defaults to 1.

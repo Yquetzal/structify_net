@@ -18,10 +18,12 @@ Details of the classes
 
 .. autoclass:: Rank_model
    :members:
+   :special-members: __init__
    :undoc-members:
    :show-inheritance:
 
 .. autoclass:: Graph_generator
    :members:
+   :special-members: __init__
    :undoc-members:
    :show-inheritance:

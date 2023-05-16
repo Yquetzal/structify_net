@@ -2,8 +2,36 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 import math
+import itertools
 
-def _plot_rank_matrix(rank_model,nodeOrder=None,ax=None):
+def _plot_matrix(dict_values,node_order,ax=None,**kwargs):
+    """Plot a matrix
+
+    Args:
+        matrix (_type_): a matrix
+        ax (_type_, optional): a matplotlib axis. Defaults to None.
+
+    Returns:
+        _type_: a matplotlib plot
+    """
+    n=len(node_order)
+    matrix = np.zeros((n,n))
+    for i,j in itertools.combinations(range(n),2):
+        matrix[i,j]=dict_values[frozenset((node_order[i],node_order[j]))]
+        matrix[j,i]=dict_values[frozenset((node_order[i],node_order[j]))]
+            
+    #if node_order!=None:
+    #    matrix=matrix[node_order,:]
+    #    matrix=matrix[:,node_order]
+
+    heatmap_args={'cmap':"YlGnBu_r",'cbar':False,'xticklabels':False,'yticklabels':False}
+    for k,v in kwargs.items():
+        heatmap_args[k]=v    
+    m = sns.heatmap(matrix,ax=ax,**heatmap_args)
+
+    return m
+
+def _plot_rank_matrix(rank_model,nodeOrder=None,ax=None,**kwargs):
     """
     Plot a matrix of the graph, ordered by nodePair_order
     graph: a networkx graph
@@ -19,15 +47,20 @@ def _plot_rank_matrix(rank_model,nodeOrder=None,ax=None):
 
     matrix = np.zeros((n,n))
     for i,e in enumerate(nodePair_order):
-        matrix[e[0],e[1]]=i
-        matrix[e[1],e[0]]=i
+        e_l=list(e)
+        matrix[e_l[0],e_l[1]]=i
+        matrix[e_l[1],e_l[0]]=i
 
     if nodeOrder!=None:
         matrix=matrix[nodeOrder,:]
         matrix=matrix[:,nodeOrder]
 
+    heatmap_args={'cmap':"YlGnBu_r",'cbar':False,'xticklabels':False,'yticklabels':False}
+    for k,v in kwargs.items():
+        heatmap_args[k]=v
+        
     #m = sns.heatmap(matrix,cmap="YlGnBu_r",cbar=False,cbar_kws={'label': 'Rank'},xticklabels=False,yticklabels=False,ax=ax)
-    m = sns.heatmap(matrix,cmap="YlGnBu_r",cbar=False,xticklabels=False,yticklabels=False,ax=ax)
+    m = sns.heatmap(matrix,ax=ax,**heatmap_args)
 
     return m
 
@@ -47,20 +80,30 @@ def plot_adjacency_matrix(g,nodeOrder=None):
     for e in g.edges:
         matrix[e[0],e[1]]=1
         matrix[e[1],e[0]]=1
+        
+    if nodeOrder!=None:
+        matrix=matrix[nodeOrder,:]
+        matrix=matrix[:,nodeOrder]
 
     m = sns.heatmap(matrix,cmap="binary",cbar=False)
 
     return m
 
-def _plot_proba_function(generator,ax=None):
+def _plot_proba_function(generator,cumulative=False,ax=None):
 
     probas = generator.probas
+    sorted_probas = sorted(probas,reverse=True)
     #res = sns.lineplot(x=range(len(probas)),y=sorted(probas,reverse=True))
+    if cumulative:
+        sorted_probas=np.cumsum(sorted_probas)
     if ax==None:
         fig,ax=plt.subplots()
-    res = ax.plot(range(len(probas)),sorted(probas,reverse=True))
+    res = ax.plot(range(len(probas)),sorted_probas)
 
-    plt.ylabel("Probability to observe an edge")
+    if cumulative:
+        plt.ylabel("Expected number of edges")
+    else:
+        plt.ylabel("Probability to observe an edge")
     plt.xlabel("Position of sorted node pairs")
     return res 
 

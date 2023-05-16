@@ -6,9 +6,8 @@ import math
 import networkx as nx
 import numpy as np
 import structify_net as stn
+import perlin_noise 
 
-#We can choose the number of dimensions
-#Add random positions in [0,1] in d dimensions, with names d1, d2, etc. to nodes
 def _assign_ordinal_attributes(nb_nodes,d,g=None):
     if g==None:
         g=nx.Graph()
@@ -27,7 +26,7 @@ def _n_to_graph(n):
 def sort_ER(nodes):
     """Erdos-Renyi rank model
     
-    Returns a rank model based on the Erdos-Renyi model. The Erdos-Renyi model is a random graph model where each pair of nodes is connected with probability p. For a rank model, all pairs of nodes have the same probability, so it simply shuffles the order of the nodes.
+    Returns a rank model based on the Erdos-Renyi model. The Erdos-Renyi model is a random graph model where each pair of nodes is connected with probability p. For a rank model, all pairs of nodes have the same probability.
 
     Args:
         nodes (_type_): describe nodes of the graphs, either as a networkx graph (node names and node attributes are preserved) or an integer (number of nodes)
@@ -35,48 +34,9 @@ def sort_ER(nodes):
     Returns:
         :class:`structify_net.Rank_model`:: The corresponding rank model
     """
-    if not isinstance(nodes,nx.Graph):
-        g=_n_to_graph(nodes)
-    else:
-        g=nodes
-    order = list(itertools.combinations(g.nodes,2))
-    random.shuffle(order)
-    return stn.Rank_model(order,g)
+    return stn.Rank_model(nodes,lambda x,y,z: 0)
 
 
-
-
-
-
-
-
-
-
-
-
-# def ER_generator(n,m=None,p=None):
-#     """Return a graph generator based on the Erdos-Renyi model
-
-#     Returns a graph generator based on the Erdos-Renyi model. The Erdos-Renyi model is a random graph model where each pair of nodes is connected with equal probability p. 
-    
-#     Either the number of edges m or the probability p must be specified. If both are specified, m takes precedence.
-    
-#     Args:
-#         n (_type_): number of nodes
-#         m (_type_, optional): number of edges. Defaults to None.
-#         p (_type_, optional): probability of an edge. Defaults to None.
-
-#     Raises:
-#         ValueError: _description_
-        
-#     Returns:
-#         :class:`structify_net.Graph_generator`:: The corresponding graph generator
-#     """
-#     if m==None and p==None:
-#         raise ValueError("Either m or p must be specified")
-#     if m==None:
-#         m=int(n*p)
-#     stn.Graph_generator.ER(n,m)
 
 
 def _assign_nominal_attributes(blocks,nb_nodes=None,g=None,name="block1"):
@@ -102,14 +62,10 @@ def _assign_nominal_attributes(blocks,nb_nodes=None,g=None,name="block1"):
     return(g)
 
 
-
-#Spatial/Geometric network, homophily (Ordinal)
-#Nodes are ranked according to the euclidean distance between their attributes. 
-#Typically, 1Dimension for homophily, 2 for spatial.
 def sort_distances(nodes,dimensions=1,distance="euclidean"):
     """Rank model based on the distance between nodes
     
-    Also called spatial or geometric network, this rank model is based on the distance between nodes. The distance is defined by the distance function, and the dimensions are defined by the attributes of the nodes.
+    Also called spatial or geometric network, this rank model is based on the distance between nodes. The distance is defined by the distance function, and the dimensions are defined by the attributes of the nodes. By default, a single dimension is used, and the distance is the euclidean distance.
 
     Args:
         nodes (_type_): describe nodes of the graphs, either as a networkx graph (node names and node attributes are preserved) or an integer (number of nodes)
@@ -130,14 +86,42 @@ def sort_distances(nodes,dimensions=1,distance="euclidean"):
     if isinstance(dimensions,int):
         g = _assign_ordinal_attributes(len(g.nodes),dimensions)
         dimensions=["d"+str(i_dim+1) for i_dim in range(dimensions)]
-    sorted_pairs=itertools.combinations(g.nodes,2)
-    positions={n:[g.nodes[n][d] for d in dimensions] for n in g.nodes}
-    sorted_pairs={(u,v):distance(positions[u],positions[v]) for u,v in sorted_pairs}
-    sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=False)
 
-    sorted_pairs=[e[0] for e in sorted_pairs]
-    node_order = sorted(nx.get_node_attributes(g,"d1").items(), key=lambda e: e[1],reverse=False)
-    return stn.Rank_model(sorted_pairs, g,node_order=[e[0] for e in node_order])
+    positions={n:[g.nodes[n][d] for d in dimensions] for n in g.nodes}
+    def rank_function(u,v,_):
+        return distance(positions[u],positions[v])
+    
+    node_order = lambda g:sorted(g.nodes,key=lambda n: g.nodes[n][dimensions[0]])
+    return stn.Rank_model(g,rank_function,node_order_function=lambda g: node_order(g))
+
+def sort_perlin_noise(nodes=10,octaves=None):
+    """Rank model based on Perlin noise
+
+    Perline noise is a type of gradiant noise frequently used in computer graphics to create images with a realistic feel, such as textures and landscapes. we use it to generate an adjacency matrix, from the upper-triangle of a 2d image having as many pixels as there are nodes in the graph. The $R'$ rank score is the black intensity of the pixel. In practice, Perlin noise tends to create continuous shapes of lower and higher values. As with SBM, this generator tends to create stronger relations between some groups of nodes with some other groups of nodes, although the groups are fuzzy, and not necessarily assortative. Perlin noise has a parameter, called octaves, allowing to add smaller scale structures on top of each other.
+
+
+    Args:
+        nodes (int, optional): _description_. Defaults to 10.
+        octaves (_type_, optional): Octave parameter of the Perlin noise. The higher the value, the finer the structure. Defaults to None, meaning octaves = int(ln(n))
+
+    Returns:
+        :class:`structify_net.Rank_model`:: The corresponding rank model
+    """
+    if not isinstance(nodes,nx.Graph):
+        g=  _n_to_graph(nodes)
+    else:
+        g=nodes
+    n=len(g.nodes)
+    
+    if octaves==None:
+        octaves = int(np.log(n))
+    noise = perlin_noise.PerlinNoise(octaves=octaves)
+
+    
+    def rank_function(u,v,g):
+        return noise([u/n,v/n])
+    return stn.Rank_model(g,rank_function)
+
 
 #Defining assortative blocks/communities. 
 #Be carefull that pairs are ordered both inside and outside blocks (favor low number nodes)
@@ -172,12 +156,13 @@ def sort_blocks_assortative(nodes,blocks=None):
         blocks="block1"
     
     blocks=nx.get_node_attributes(g,blocks)
-    sorted_pairs={(u,v): 2+random.random() if blocks[u]==blocks[v] else 0+random.random() for u,v in sorted_pairs}
-    sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=True)
-    sorted_pairs=[e[0] for e in sorted_pairs]
-
-    node_order = sorted(nx.get_node_attributes(g,"block1").items(), key=lambda e: e[1],reverse=False)
-    return stn.Rank_model(sorted_pairs, g,node_order=[e[0] for e in node_order])
+    def rank_function(u,v,g):
+        return 2 if blocks[u]==blocks[v] else 0
+    
+    def node_order_function(g):
+        return sorted(g.nodes,key=lambda n: g.nodes[n]["block1"])
+    
+    return stn.Rank_model(g,rank_function,node_order_function=lambda g: node_order_function(g),sort_descendent=True)
 
 def _flatten(l):
     return [item for sublist in l for item in sublist]
@@ -212,28 +197,23 @@ def sort_overlap_communities(nodes,blocks=None):
         nx.set_node_attributes(g,{i:b for i,b in enumerate(block1)},"block1")
         nx.set_node_attributes(g,{i:b for i,b in enumerate(block2)},"block2")
         blocks=["block1","block2"]
-        #g = _assign_nominal_attributes(block_id,len(g.nodes),g)
-        #block_id="block"
+
     
-    sorted_pairs=itertools.combinations(g.nodes,2)
 
     all_blocks={}
     for b in blocks:
         affiliations=nx.get_node_attributes(g,b)
         all_blocks[b]=affiliations
-    similarity={}
-    for u,v in sorted_pairs:
-        similarity[(u,v)]=np.random.random()/100
+
+    def rank_function(u,v,g):
         for b in blocks:
             if all_blocks[b][u]==all_blocks[b][v]:
-                similarity[(u,v)]=1+np.random.random()/100
-                #similarity[(u,v)]+=1
-    sorted_pairs = sorted(similarity.items(), key=lambda e: e[1],reverse=True)
-    #sorted_pairs={(u,v): 2+random.random() if blocks[u]==blocks[v] else 0+random.random() for u,v in sorted_pairs}
-    sorted_pairs=[e[0] for e in sorted_pairs]
+                return 1
+                break
+        return 0
 
-    node_order = sorted(nx.get_node_attributes(g,"block1").items(), key=lambda e: e[1],reverse=False)
-    return stn.Rank_model(sorted_pairs, g,node_order=[e[0] for e in node_order])
+    node_order = lambda g: sorted(nx.get_node_attributes(g,"block1").items(), key=lambda e: e[1],reverse=False)
+    return stn.Rank_model(g,rank_function,node_order_function=lambda g: [e[0] for e in node_order(g)],sort_descendent=True)
 
 #Defining assortative blocks/communities. 
 #Be carefull that pairs are ordered both inside and outside blocks (favor low number nodes)
@@ -256,27 +236,23 @@ def sort_largest_disconnected_cliques(nodes,m):
 
     sorted_pairs=itertools.combinations(g.nodes,2)
     n=len(g.nodes())
-    #(c*(c-1)/2)*k<=m, c*k=n, I want to find the largest possible k
-    #nb_c= = (n/m) / 2 + sqrt((n/m)^2/4 - 2)
+
     c_size=math.ceil((2*m)/n+1) #Because we know the average degree, so the correst size for a clique
     nb_c=math.floor(n/c_size)
     missing=n-c_size*nb_c
     affil = [[c_label]*c_size for c_label in range(nb_c)]
     affil = [item for sublist in affil for item in sublist]+[nb_c-1]*missing
     blocks={i:affil[i] for i in range(n)}
-    sorted_pairs={(u,v): 2+random.random() if blocks[u]==blocks[v] else 0+random.random() for u,v in sorted_pairs}
-    sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=True)
-    return stn.Rank_model([e[0] for e in sorted_pairs], g)
+    def rank_function(u,v,g):
+        return 1 if blocks[u]==blocks[v] else 0
+    return stn.Rank_model(g,rank_function,sort_descendent=True)
 
-#Defining a degree heterogeneous network. Pairs of nodes are sorted such as all pairs of nodes of node n1 are first,
-# then all pairs of nodes of node n2, etc. The strongest structure corresponds to a star structure: a few nodes
-# are connected to all others, that have only this link.
+
 def sort_stars(nodes):
     """A rank model based on a star structure
     
-    A star structure is a few nodes connected to all others, that have only this link.
-    
-
+     This rank model sorts pairs of nodes such as all pairs of nodes of node n1 are first, then all pairs of nodes of node n2, etc.
+     
     Args:
         nodes (_type_): Describe nodes. Can be either a networkx graph (node names and node attributes are preserved) or an integer (number of nodes)
 
@@ -287,21 +263,19 @@ def sort_stars(nodes):
         g=_n_to_graph(nodes)
     else:
         g=nodes
+    n=len(g.nodes)
+    def R(u,v,g):
+        return u*n+v
+    return stn.Rank_model(g,R,sort_descendent=False)
+# def sort_stars(nodes):
+   
+#     if not isinstance(nodes,nx.Graph):
+#         g=_n_to_graph(nodes)
+#     else:
+#         g=nodes
 
-    sorted_pairs=itertools.combinations(g.nodes,2)
-    return stn.Rank_model(list(sorted_pairs), g)
-
-
-
-
-
-
-
-
-
-
-
-
+#     sorted_pairs=itertools.combinations(g.nodes,2)
+#     return stn.Rank_model(list(sorted_pairs), g)
 
 
 
@@ -325,13 +299,26 @@ def sort_stars(nodes):
 
 
 
-# A proposition of a (continuous) core-periphery organization. Pairs of nodes are sorted according to the sum 
-# of the distance of their nodes to the center of the space.
+
+
+
+
+
+
+
+
+
+
+
 def sort_core_distance(nodes,dimensions=1,distance="euclidean"):
     """Rank model based on the sum of the distance of their nodes to the center of the space.
     
-    This is a proposition of a (continuous) core-periphery organization. Pairs of nodes are sorted according to the sum of the distance of their nodes to the center of the space.
-
+    Core periphery structure is another well-known type of organization for complex systems. This organization is often modeled using blocks, one block being the dense core, another block, internally sparse, represent the periphery, and the density between the two blocks is set at an intermediate value. To illustrate the flexibility of the Rank approach, we propose a soft-core alternative, the coreness dissolving progressively into a periphery. To do so, we consider nodes embedded into a space, as for the spatial structure --random 1d positions by default. The node-pair rank score is computed as the inverse of the product of 3 distances: the distances from both nodes to the center, and the distance between the two nodes. As a consequence, when two nodes belong to the center, they are very likely to be connected; two nodes far from the center are unlikely to be connected, unless if they are extremely close from each other. 
+    \[
+    R'(u,v)=d(W_u,W_v)d(W_u,\mathbf{0})d(W_v,\mathbf{0})
+    \]
+    With $\mathbf{0}$ the vector corresponding to the center of the location considered as the core of the space.
+    
     Args:
         nodes (_type_): Describe nodes. Can be either a networkx graph (node names and node attributes are preserved) or an integer (number of nodes)
         dimensions (int, optional): Number of dimensions. Defaults to 1.
@@ -348,19 +335,20 @@ def sort_core_distance(nodes,dimensions=1,distance="euclidean"):
         g=_n_to_graph(nodes)
     else:
         g=nodes
+        
     if isinstance(dimensions,int):
         g = _assign_ordinal_attributes(len(g.nodes),dimensions)
         dimensions=["d"+str(i_dim+1) for i_dim in range(dimensions)]
 
-    sorted_pairs=itertools.combinations(g.nodes,2)
     positions={n:[g.nodes[n][d] for d in dimensions] for n in g.nodes}
-    def core_distance(u,v):
-        return distance(positions[u],[0.5]*len(dimensions))*distance(positions[v],[0.5]*len(dimensions))
-    sorted_pairs={(u,v):core_distance(u,v) for u,v in sorted_pairs}
-    sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=False)
-    sorted_pairs=[e[0] for e in sorted_pairs]
-    node_order = sorted(nx.get_node_attributes(g,"d1").items(), key=lambda e: e[1],reverse=False)
-    return stn.Rank_model(sorted_pairs, g,[e[0] for e in node_order])
+    def core_distance(u,v,_):
+        return distance(positions[u],[0.5]*len(dimensions))*distance(positions[v],[0.5]*len(dimensions))*distance(positions[u],positions[v])
+    
+    def node_order_function(g):
+        return sorted(g.nodes,key=lambda n: g.nodes[n]["d1"],reverse=False)
+
+    return stn.Rank_model(g,core_distance,sort_descendent=False,node_order_function=node_order_function)
+
 
 def sort_spatial_WS(nodes,k=10):
     """Rank model based on a spatial Watts-Strogatz model
@@ -378,15 +366,13 @@ def sort_spatial_WS(nodes,k=10):
         g=_n_to_graph(nodes)
     else:
         g=nodes
+    n=len(g.nodes)
+    def my_dist(u,v,g):
+        if ((v-u)%(n-(k/2))<=k/2):
+            return 0
+        return 2
 
-    sorted_pairs=itertools.combinations(g.nodes,2)
-    def my_dist(u,v):
-        if ((v-u)%(len(g.nodes)-(k/2))<=k/2):
-            return 0+random.random()
-        return 2+random.random()
-    sorted_pairs={(u,v):my_dist(u,v) for u,v in sorted_pairs}
-    sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=False)
-    return stn.Rank_model([e[0] for e in sorted_pairs], g)
+    return stn.Rank_model(g,my_dist,sort_descendent=False)
 
 def sort_fractal_leaves(nodes,d=2):
     """A rank model based on a fractal structure
@@ -411,12 +397,11 @@ def sort_fractal_leaves(nodes,d=2):
     leaves_ids=list(binary_tree.nodes)[-nb_nodes:]
     binary_tree = nx.relabel_nodes(binary_tree,{n:"temp_"+str(i) for i,n in enumerate(leaves_ids)})
 
-    pairs=itertools.combinations(g.nodes,2)
     all_distances = {x:v for x,v in nx.all_pairs_shortest_path_length(binary_tree)}
-    #print(all_distances)
-    sorted_pairs = {(u,v):all_distances["temp_"+str(u)]["temp_"+str(v)]+random.random()/10 for (u,v) in pairs}
-    sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=False)
-    return stn.Rank_model([e[0] for e in sorted_pairs], g)
+
+    def distance(u,v,_):
+        return all_distances["temp_"+str(u)]["temp_"+str(v)]
+    return stn.Rank_model(g,distance,sort_descendent=False)
 
 def sort_fractal_root(nodes,d=2):
     """A rank model based on a fractal structure
@@ -436,16 +421,23 @@ def sort_fractal_root(nodes,d=2):
         g=nodes
 
     nb_nodes=len(g.nodes)
-    height = math.ceil(math.log(nb_nodes, d)+1)
-    binary_tree = nx.balanced_tree(d,height-1)
+    height=_determine_tree_height(nb_nodes,d)
+    binary_tree = nx.balanced_tree(d,height)
     leaves_ids=list(binary_tree.nodes)[:nb_nodes]
     binary_tree = nx.relabel_nodes(binary_tree,{n:"temp_"+str(i) for i,n in enumerate(leaves_ids)})
-
-    pairs=itertools.combinations(g.nodes,2)
     all_distances = {x:v for x,v in nx.all_pairs_shortest_path_length(binary_tree)}
-    sorted_pairs = {(u,v):all_distances["temp_"+str(u)]["temp_"+str(v)]+random.random()/10 for (u,v) in pairs}
-    sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=False)
-    return stn.Rank_model([e[0] for e in sorted_pairs], g)
+    def distance(u,v,_):
+        return all_distances["temp_"+str(u)]["temp_"+str(v)]
+    return stn.Rank_model(g,distance,sort_descendent=False)
+
+def _determine_tree_height(n,d):
+    tree_size=1
+    height=0
+    while tree_size<n:
+        tree_size+=d**(height+1)
+        height+=1
+    
+    return height
 
 def sort_nestedness(nodes):
     """Rank model based on nestedness
@@ -463,9 +455,9 @@ def sort_nestedness(nodes):
     else:
         g=nodes
 
-    sorted_pairs=itertools.combinations(g.nodes,2)
-    sorted_pairs = sorted(list(sorted_pairs),key=lambda x: x[0]+x[1])
-    return stn.Rank_model(sorted_pairs, g)
+    def R_nestedness(u,v,_):
+        return u+v
+    return stn.Rank_model(g,R_nestedness,sort_descendent=False)
 
 def sort_fractal_hierarchical(nodes,d=3):
     """Rank model based on a fractal structure
@@ -485,34 +477,33 @@ def sort_fractal_hierarchical(nodes,d=3):
         g=nodes
 
     nb_nodes=len(g.nodes)
-    height = math.ceil(math.log(nb_nodes, d)+1)
-    binary_tree = nx.balanced_tree(d,height-1)
+    height=_determine_tree_height(nb_nodes,d)
+    binary_tree = nx.balanced_tree(d,height)
     leaves_ids=list(binary_tree.nodes)[:nb_nodes]
     binary_tree = nx.relabel_nodes(binary_tree,{n:"temp_"+str(i) for i,n in enumerate(leaves_ids)})
 
     pairs=itertools.combinations(g.nodes,2)
     all_distances = {x:v for x,v in nx.all_pairs_shortest_path_length(binary_tree) }
-    #degrees = {k:v for k,v in binary_tree.degree}
-    heights = nx.shortest_path_length(binary_tree,"temp_"+str(0))
+    depths = nx.shortest_path_length(binary_tree,"temp_"+str(0))
+    
+    def height_from_bottom(u):
+        return height-depths["temp_"+str(u)]
     
     def child_of(u,v):
-        return all_distances["temp_"+str(u)]["temp_"+str(v)]==abs(heights["temp_"+str(u)]-heights["temp_"+str(v)])
+        return all_distances["temp_"+str(u)]["temp_"+str(v)]==abs(depths["temp_"+str(u)]-depths["temp_"+str(v)])
     
     def child_score(u,v):
-        #return height-max(heights["temp_"+str(u)],heights["temp_"+str(v)])
-        return height-1-abs(heights["temp_"+str(u)]-heights["temp_"+str(v)])
+
+        return min(height_from_bottom(u),height_from_bottom(v))+min(depths["temp_"+str(u)],depths["temp_"+str(v)])
     
     def family_score(u,v):
-        return (all_distances["temp_"+str(u)]["temp_"+str(v)]-2)*1000+height-1-max(heights["temp_"+str(u)],heights["temp_"+str(v)])#+child_score(u,v)
-                                                                  
-    sorted_pairs = {(u,v):child_score(u,v) if child_of(u,v) else family_score(u,v) for (u,v) in pairs}
-    sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=False)
-    return stn.Rank_model([e[0] for e in sorted_pairs], g)
-
-
-
-
-
+        if depths["temp_"+str(u)]==depths["temp_"+str(v)]: #same height
+            return (all_distances["temp_"+str(u)]["temp_"+str(v)]-2)+height_from_bottom(u)
+        else:
+            return height+all_distances["temp_"+str(u)]["temp_"+str(v)]
+    def R_fractal(u,v,_):
+        return child_score(u,v) if child_of(u,v) else family_score(u,v)
+    return stn.Rank_model(g,R_fractal,sort_descendent=False)                                            
 
 
 
@@ -563,31 +554,11 @@ def sort_fractal_star(nodes,d=2):
     binary_tree = nx.relabel_nodes(binary_tree,{n:"temp_"+str(i) for i,n in enumerate(leaves_ids)})
 
     pairs=itertools.combinations(g.nodes,2)
-    #all_distances = {x:v for x,v in nx.all_pairs_shortest_path_length(binary_tree) }
-    #degrees = {k:v for k,v in binary_tree.degree}
+
     heights = nx.shortest_path_length(binary_tree,"temp_"+str(0))
-    sorted_pairs = {(u,v):-abs(heights["temp_"+str(u)]-heights["temp_"+str(v)])+random.random()/1000 for (u,v) in pairs}
-    sorted_pairs = sorted(sorted_pairs.items(), key=lambda e: e[1],reverse=False)
-    return stn.Rank_model([e[0] for e in sorted_pairs], g)
-
-# def sort_smallWorldTrick(nodes):
-#     if not isinstance(nodes,nx.Graph):
-#         g=_n_to_graph(nodes)
-#     else:
-#         g=nodes
-
-#     sorted_pairs=itertools.combinations(g.nodes,2)
-    
-#     def trick(x):
-#         if x[0]==0 or x[1]==0:
-#             return 0
-#         return x[0]+x[1]
-        
-#     sorted_pairs = sorted(list(sorted_pairs),key=trick)
-#     return Rank_model([e[0] for e in sorted_pairs], g)
-
-
-
+    def rank(u,v,_):
+        return abs(heights["temp_"+str(u)]-heights["temp_"+str(v)])
+    return stn.Rank_model(g,rank,sort_descendent=True)
 
 
 
@@ -616,7 +587,7 @@ def sort_fractal_star(nodes,d=2):
 
 all_models_no_param={"ER":sort_ER,"spatial":sort_distances,"spatialWS":sort_spatial_WS,"blocks_assortative":sort_blocks_assortative,"overlapping_communities":sort_overlap_communities,
              "nestedness":sort_nestedness,"maximal_stars":sort_stars,"core_distance":sort_core_distance,"fractal_leaves":sort_fractal_leaves,
-             "fractal_root":sort_fractal_root,"fractal_hierarchy":sort_fractal_hierarchical,"fractal_star":sort_fractal_star}
+             "fractal_root":sort_fractal_root,"fractal_hierarchy":sort_fractal_hierarchical,"fractal_star":sort_fractal_star,"perlin_noise":sort_perlin_noise}
 
 all_models_with_m={"disconnected_cliques":sort_largest_disconnected_cliques}
 all_models={ **all_models_no_param, **all_models_with_m }#|all_models_with_m

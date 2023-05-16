@@ -21,7 +21,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Structure Zoo" href="Zoo.html" />
-    <link rel="prev" title="Welcome to Structify_net’s documentation!" href="index.html" /> 
+    <link rel="prev" title="Introduction to Structify_Net" href="Tutorial/Tutorial.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -45,10 +45,12 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="index.html">Welcome to Structify_net’s documentation!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorial/Tutorial.html">Introduction to Structify_Net</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Classes</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#details-of-the-classes">Details of the classes</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#structify_net.Rank_model"><code class="docutils literal notranslate"><span class="pre">Rank_model</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#structify_net.Rank_model.__init__"><code class="docutils literal notranslate"><span class="pre">Rank_model.__init__()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#structify_net.Rank_model.generate_graph"><code class="docutils literal notranslate"><span class="pre">Rank_model.generate_graph()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#structify_net.Rank_model.get_generator"><code class="docutils literal notranslate"><span class="pre">Rank_model.get_generator()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#structify_net.Rank_model.plot_matrix"><code class="docutils literal notranslate"><span class="pre">Rank_model.plot_matrix()</span></code></a></li>
@@ -57,7 +59,9 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#structify_net.Graph_generator"><code class="docutils literal notranslate"><span class="pre">Graph_generator</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#structify_net.Graph_generator.ER"><code class="docutils literal notranslate"><span class="pre">Graph_generator.ER()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#structify_net.Graph_generator.__init__"><code class="docutils literal notranslate"><span class="pre">Graph_generator.__init__()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#structify_net.Graph_generator.generate"><code class="docutils literal notranslate"><span class="pre">Graph_generator.generate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#structify_net.Graph_generator.plot_matrix"><code class="docutils literal notranslate"><span class="pre">Graph_generator.plot_matrix()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#structify_net.Graph_generator.plot_proba_function"><code class="docutils literal notranslate"><span class="pre">Graph_generator.plot_proba_function()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#structify_net.Graph_generator.scores"><code class="docutils literal notranslate"><span class="pre">Graph_generator.scores()</span></code></a></li>
 </ul>
@@ -69,7 +73,6 @@
 <li class="toctree-l1"><a class="reference internal" href="Zoo.html">Structure Zoo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Visualization.html">Visualization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Scoring.html">Scoring</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Tutorial/Tutorial.html">Introduction to Structify-Net</a></li>
 </ul>
 
         </div>
@@ -110,17 +113,38 @@
 <h2>Details of the classes<a class="headerlink" href="#details-of-the-classes" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="structify_net.Rank_model">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">structify_net.</span></span><span class="sig-name descname"><span class="pre">Rank_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sortedPairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_properties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#structify_net.Rank_model" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">structify_net.</span></span><span class="sig-name descname"><span class="pre">Rank_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_descendent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_order_function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#structify_net.Rank_model" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A class to represent a rank model</p>
 <p>A rank model is composed of a list of node pairs, ordered such as the first ones are the most likely to be connected. It can also contain node properties, and a node order, which is the order in which the nodes should be plotted in a plot matrix. It can return a graph generator(provided a proper probability function), which can be used to generate graphs based on this rank model.</p>
 <p>Node properties are useful to match the edge order with the structure, it can be used to store the spatial position of nodes or the community membership of nodes, for example.</p>
+<p>Example of usage:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="o">=</span><span class="mi">10</span>
+<span class="n">my_model</span> <span class="o">=</span> <span class="n">Rank_model</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">),</span><span class="k">lambda</span> <span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">:</span> <span class="n">u</span><span class="o">+</span><span class="n">v</span><span class="p">)</span>
+<span class="n">my_model</span><span class="o">.</span><span class="n">plot_matrix</span><span class="p">()</span>
+<span class="n">my_generator</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">get_generator</span><span class="p">(</span><span class="n">epsilon</span><span class="o">=</span><span class="mi">0</span> <span class="p">,</span><span class="n">m</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="n">my_model</span><span class="o">.</span><span class="n">generate_graph</span><span class="p">(</span><span class="n">epsilon</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">m</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="simple">
 <dt>Attributes:</dt><dd><p>sortedPairs (_type_): A list of node pairs, ordered such as the first ones are the most likely to be connected
 node_properties (_type_, optional): node properties provided as networkx graph or dictionary. Defaults to None.
 node_order (_type_, optional): The order in which the nodes should be plotted in a plot matrix. Defaults to None.</p>
 </dd>
 </dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="structify_net.Rank_model.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_descendent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_order_function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#structify_net.Rank_model.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Initialize a rank model from a sort function, for given nodes</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>nodes (_type_): Nodes, provided as a networkx graph or a list of nodes. If a networkx graph is provided, node properties can be provided as node attributes
+sort_function (_type_): a function that takes two nodes and the nodes as argument, and returns a score for the edge between the two nodes
+sort_descendent (bool, optional): Whether to sort by descending values of the scoring function. Defaults to False.
+node_order_function (_type_, optional): A function definiting an order on the nodes, for plotting. Defaults to None.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="structify_net.Rank_model.generate_graph">
 <span class="sig-name descname"><span class="pre">generate_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epsilon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#structify_net.Rank_model.generate_graph" title="Permalink to this definition"></a></dt>
@@ -153,7 +177,7 @@ m (_type_, optional): the number of edges in the graph. Defaults to None.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="structify_net.Rank_model.plot_matrix">
-<span class="sig-name descname"><span class="pre">plot_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodeOrder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#structify_net.Rank_model.plot_matrix" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">plot_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodeOrder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#structify_net.Rank_model.plot_matrix" title="Permalink to this definition"></a></dt>
 <dd><p>Plot a matrix of the rank model</p>
 <p>Node pairs are ordered by rank. The color of the cell is the rank of the edge.</p>
 <dl class="simple">
@@ -189,6 +213,16 @@ latex_names (bool, optional): Whether to use latex names for the scores. Default
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A graph generator</p>
 <p>This class instantiate graph generators. It is composed of a Rank Model Class, and a list of probabilites, such as the index of the probability in the list corresponds to the index of the edge in the rank model.</p>
+<p>Example of usage:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="o">=</span><span class="mi">10</span>
+<span class="n">my_model</span> <span class="o">=</span> <span class="n">Rank_model</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">),</span><span class="k">lambda</span> <span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">:</span> <span class="n">u</span><span class="o">+</span><span class="n">v</span><span class="p">)</span>
+<span class="n">my_generator</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">get_generator</span><span class="p">(</span><span class="n">epsilon</span><span class="o">=</span><span class="mi">0</span> <span class="p">,</span><span class="n">m</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="n">my_generator</span><span class="o">.</span><span class="n">plot_proba_function</span><span class="p">()</span>
+<span class="n">my_generator</span><span class="o">.</span><span class="n">plot_matrix</span><span class="p">()</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">my_generator</span><span class="o">.</span><span class="n">generate</span><span class="p">()</span>
+<span class="n">my_generator</span><span class="o">.</span><span class="n">scores</span><span class="p">(</span><span class="n">scores</span><span class="o">=</span><span class="p">[</span><span class="n">scoring</span><span class="o">.</span><span class="n">average_clustering</span><span class="p">,</span><span class="n">scoring</span><span class="o">.</span><span class="n">clustering</span><span class="p">],</span><span class="n">run</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="simple">
 <dt>Attributes:</dt><dd><p>rank_model (_type_): A rank model
 sortedPairs (_type_): the node pairs, sorted from the most likely to the least likely to be connected, same as in the rank model
@@ -209,6 +243,17 @@ p (float): probability of an edge</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="structify_net.Graph_generator.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rank_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">probas</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#structify_net.Graph_generator.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Create a graph generator</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>rank_model (_type_): A rank model
+probas (_type_): the probabilities of the edges in the rank model. Should be a list of the same length as the number of node pairs in the rank model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="structify_net.Graph_generator.generate">
 <span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#structify_net.Graph_generator.generate" title="Permalink to this definition"></a></dt>
 <dd><p>Generate a graph based on this generator</p>
@@ -219,8 +264,20 @@ p (float): probability of an edge</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="structify_net.Graph_generator.plot_matrix">
+<span class="sig-name descname"><span class="pre">plot_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodeOrder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#structify_net.Graph_generator.plot_matrix" title="Permalink to this definition"></a></dt>
+<dd><p>Plot a matrix of the  graph generator</p>
+<p>The color of the cell is the probability to observe an edge between the two nodes.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>nodeOrder (_type_, optional): the order in which the nodes should be plotted. Defaults to None.
+ax (_type_, optional): an axis to plot on. Defaults to None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="structify_net.Graph_generator.plot_proba_function">
-<span class="sig-name descname"><span class="pre">plot_proba_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#structify_net.Graph_generator.plot_proba_function" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">plot_proba_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cumulative</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#structify_net.Graph_generator.plot_proba_function" title="Permalink to this definition"></a></dt>
 <dd><p>Plot the probability function
 This function plots the probability function of the graph generator. It is a plot of the probability of an edge to exist as a function of the rank of the edge in the rank model.</p>
 <dl class="simple">
@@ -255,7 +312,7 @@ latex_names (bool, optional): if True, use latex names for the scores. Defaults 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to Structify_net’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Tutorial/Tutorial.html" class="btn btn-neutral float-left" title="Introduction to Structify_Net" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="Zoo.html" class="btn btn-neutral float-right" title="Structure Zoo" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

@@ -20,7 +20,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Classes" href="Classes.html" /> 
+    <link rel="next" title="Introduction to Structify_Net" href="Tutorial/Tutorial.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -44,11 +44,11 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Welcome to Structify_net’s documentation!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorial/Tutorial.html">Introduction to Structify_Net</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Classes.html">Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Zoo.html">Structure Zoo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Visualization.html">Visualization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Scoring.html">Scoring</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Tutorial/Tutorial.html">Introduction to Structify-Net</a></li>
 </ul>
 
         </div>
@@ -81,18 +81,35 @@
 <h2>What is Structify_net?<a class="headerlink" href="#what-is-structify-net" title="Permalink to this heading"></a></h2>
 <p>Structify_net is a python library allowing to create networks with a predefined structure, and a chosen number of nodes and links.</p>
 <p>The principle is to use a common framework to encompass community/bloc structure, spatial structure, and many other types of structures.</p>
-<p>More specifically, a structure is defined by:
-- a number of nodes <cite>n</cite>
-- a ranking of all the pairs of nodes, from most likely to be present to less likely to be present.</p>
-<p>We can instanciate such a model using the <cite>Rank_model</cite> class.</p>
-<p>This abstract structure can be instanciated into a graph generator by adding:
-- An expected number of edges <cite>m</cite>
-- a probability distribution assigning a probability of observing an edge to each rank
-We can instanciate such a model using the <cite>Graph_generator</cite> class.</p>
-<p>This library also contains a set of tools to visualize and score the resulting networks.</p>
+<p>More specifically, a structure is defined by:</p>
+<ul class="simple">
+<li><p>a number of nodes <cite>n</cite></p></li>
+<li><p>a ranking of all the pairs of nodes, from most likely to be present to less likely to be present.</p></li>
+</ul>
+<p>We can instanciate such a model using the <a class="reference internal" href="Classes.html#structify_net.Rank_model" title="structify_net.Rank_model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Rank_model</span></code></a> class.</p>
+<p>This abstract structure can be instanciated into a graph generator by adding:</p>
+<ul class="simple">
+<li><p>An expected number of edges <cite>m</cite></p></li>
+<li><p>a probability distribution assigning a probability of observing an edge to each rank</p></li>
+</ul>
+<p>We can instanciate such a model using the <a class="reference internal" href="Classes.html#structify_net.Graph_generator" title="structify_net.Graph_generator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Graph_generator</span></code></a> class.</p>
+<p>This library also contains a set of tools to visualize (<code class="xref py py-mod docutils literal notranslate"><span class="pre">viz</span></code>) and score (<code class="xref py py-mod docutils literal notranslate"><span class="pre">scoring</span></code>)the resulting networks.</p>
 <div class="toctree-wrapper compound">
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Welcome to Structify_net’s documentation!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorial/Tutorial.html">Introduction to Structify_Net</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tutorial.html#step-1-graph-properties-definition">Step 1: Graph properties definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tutorial.html#step-2-structure-definion">Step 2: Structure definion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tutorial.html#step-3-edge-probability-definition">Step 3: Edge probability definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tutorial.html#step-4-generate-a-graph-from-edge-probabilities">Step 4: Generate a graph from edge probabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tutorial.html#whole-process-in-a-function">Whole process in a function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tutorial.html#structure-zoo">Structure Zoo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tutorial.html#graph-description">Graph description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tutorial.html#models-profiling">Models Profiling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tutorial.html#comparing-with-an-observed-network">Comparing with an observed network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tutorial.html#details-of-models-matching">Details of models matching</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="Classes.html">Classes</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="Classes.html#introduction">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Classes.html#details-of-the-classes">Details of the classes</a></li>
@@ -112,19 +129,6 @@ We can instanciate such a model using the <cite>Graph_generator</cite> class.</p
 <li class="toctree-l2"><a class="reference internal" href="Scoring.html#useful-functions">Useful functions</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="Tutorial/Tutorial.html">Introduction to Structify-Net</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tutorial.html#step-1-graph-properties-definition">Step 1: Graph properties definition</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tutorial.html#step-2-structure-definion">Step 2: Structure definion</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tutorial.html#step-3-edge-probability-definition">Step 3: Edge probability definition</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tutorial.html#step-4-generate-a-graph-from-edge-probabilities">Step 4: Generate a graph from edge probabilities</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tutorial.html#whole-process-in-a-function">Whole process in a function</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tutorial.html#structure-zoo">Structure Zoo</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tutorial.html#graph-description">Graph description</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tutorial.html#models-profiling">Models Profiling</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tutorial.html#comparing-with-an-observed-network">Comparing with an observed network</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tutorial.html#details-of-models-matching">Details of models matching</a></li>
-</ul>
-</li>
 </ul>
 </div>
 </section>
@@ -134,7 +138,7 @@ We can instanciate such a model using the <cite>Graph_generator</cite> class.</p
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="Classes.html" class="btn btn-neutral float-right" title="Classes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Tutorial/Tutorial.html" class="btn btn-neutral float-right" title="Introduction to Structify_Net" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

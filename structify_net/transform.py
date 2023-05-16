@@ -5,19 +5,19 @@ from bisect import bisect
 import networkx as nx
 import structify_net as stn
 
-def _structure2graph(nodes,ranking_function,epsilon,density=None,m=None):
-    model = _structure2model(nodes,ranking_function,epsilon,density,m)
-    return model.generate()
+# def _structure2graph(nodes,ranking_function,epsilon,density=None,m=None):
+#     model = _structure2model(nodes,ranking_function,epsilon,density,m)
+#     return model.generate()
 
-def _structure2model(nodes,ranking_function,epsilon,density=None,m=None):
-    if not isinstance(nodes, nx.Graph):
-        g = nx.Graph()
-        g.add_nodes_from(range(nodes))
-        nodes=g
+# def _structure2model(nodes,ranking_function,epsilon,density=None,m=None):
+#     if not isinstance(nodes, nx.Graph):
+#         g = nx.Graph()
+#         g.add_nodes_from(range(nodes))
+#         nodes=g
 
-    sortedPairs=ranking_function(g)
-    probas=_rank2proba(sortedPairs,epsilon,density,m)
-    return Graph_generator(sortedPairs, probas)
+#     sortedPairs=ranking_function(g)
+#     probas=_rank2proba(sortedPairs,epsilon,density,m)
+#     return Graph_generator(sortedPairs, probas)
 
 def _proba2graph(sortedPairs, probas):
     edges=[]

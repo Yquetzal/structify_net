@@ -45,6 +45,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Welcome to Structify_net’s documentation!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorial/Tutorial.html">Introduction to Structify_Net</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Classes.html">Classes</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../Zoo.html">Structure Zoo</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../Zoo.html#individual-models">Individual models</a><ul class="current">
@@ -71,7 +72,6 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../Visualization.html">Visualization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Scoring.html">Scoring</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Tutorial/Tutorial.html">Introduction to Structify-Net</a></li>
 </ul>
 
         </div>
@@ -105,7 +105,9 @@
 <dt class="sig sig-object py" id="structify_net.zoo.sort_stars">
 <span class="sig-prename descclassname"><span class="pre">structify_net.zoo.</span></span><span class="sig-name descname"><span class="pre">sort_stars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#structify_net.zoo.sort_stars" title="Permalink to this definition"></a></dt>
 <dd><p>A rank model based on a star structure</p>
-<p>A star structure is a few nodes connected to all others, that have only this link.</p>
+<blockquote>
+<div><p>This rank model sorts pairs of nodes such as all pairs of nodes of node n1 are first, then all pairs of nodes of node n2, etc.</p>
+</div></blockquote>
 <dl class="simple">
 <dt>Args:</dt><dd><p>nodes (_type_): Describe nodes. Can be either a networkx graph (node names and node attributes are preserved) or an integer (number of nodes)</p>
 </dd>
