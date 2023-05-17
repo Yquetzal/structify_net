@@ -603,7 +603,9 @@ def get_all_rank_models(n,m):
         Dictionary of rank models {name:rank_model}
     """
     to_return = {name:f(n) for name,f in all_models_no_param.items()}
-    to_return = to_return|{name:f(n,m) for name,f in all_models_with_m.items()}
+    for name,f in all_models_with_m.items():
+        to_return[name]=f(n,m)
+    #to_return = to_return|{name:f(n,m) for name,f in all_models_with_m.items()}
     return to_return
 
 #def get_all_generators(n,m):
