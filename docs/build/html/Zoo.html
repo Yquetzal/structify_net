@@ -101,8 +101,14 @@
   <section id="structure-zoo">
 <h1>Structure Zoo<a class="headerlink" href="#structure-zoo" title="Permalink to this heading"></a></h1>
 <p>The structure zoo is a collection of structures. It contains both classic ones such as bloc structures, spatial structures or Watts-Strogatz structures, and less common ones. The zoo is a good place to start if you want to learn about the different types of structures that can be created with the library.</p>
-<p>The scoring function are defined in the <cite>zoo</cite> submodule.
-There are some useful shortcuts to get collection of structures from the</p>
+<p>The zoo collection of structures is in the  <code class="xref py py-mod docutils literal notranslate"><span class="pre">zoo</span></code> submodule.</p>
+<p>Example of usage:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">structify_net.zoo</span>
+<span class="n">rank_model</span> <span class="o">=</span> <span class="n">zoo</span><span class="o">.</span><span class="n">sort_nestedness</span><span class="p">(</span><span class="n">nodes</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">rank_model</span><span class="o">.</span><span class="n">generate_graph</span><span class="p">(</span><span class="n">epsilon</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>There are some useful shortcuts to get collection of structures from the</p>
 <ul class="simple">
 <li><p><code class="xref py py-data docutils literal notranslate"><span class="pre">zoo.all_models_no_param</span></code>: contains all the model functions that do not require any parameter.</p></li>
 <li><p><code class="xref py py-data docutils literal notranslate"><span class="pre">zoo.all_models_with_m</span></code>: returns all the model functions that require a parameter <cite>m</cite> (Expected number of edges).</p></li>

@@ -170,7 +170,7 @@ def _flatten(l):
 def sort_overlap_communities(nodes,blocks=None):
     """Rank model based on overlapping communities
 
-    This rank model is based on overlapping communities. The communities are defined by the blocks argument. It can be either a list of lists, where each list is a community, or an integer corresponding to the number of communities. In the latter case, each node corresponds to two communities, and the affiliations are chosen such as each community has half of its nodes shared with another community c1 and the other half shared with another community c2.
+    This rank model is based on overlapping communities. The communities are defined by the blocks argument. It can be either a list of lists, where each list is a community, or an integer corresponding to the number of communities. In the latter case, each node belongs to two communities, and the affiliations are chosen such as each community has half of its nodes shared with another community c1 and the other half shared with another community c2.
     
     Args:
         nodes (_type_): Describe nodes of the graphs, either as a networkx graph (node names and node attributes are preserved) or an integer (number of nodes)

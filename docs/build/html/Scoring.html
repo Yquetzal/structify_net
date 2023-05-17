@@ -107,6 +107,29 @@
   <section id="scoring">
 <h1>Scoring<a class="headerlink" href="#scoring" title="Permalink to this heading"></a></h1>
 <p>The scoring submodule contains a collection of scoring function to describe graphs. The scoring function are used to compare graphs.</p>
+<blockquote>
+<div><p>The scoring function are defined in the <code class="xref py py-mod docutils literal notranslate"><span class="pre">scoring</span></code> module.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p><code class="xref py py-data docutils literal notranslate"><span class="pre">scoring.default_scores</span></code>: contains all available scores in a dictionary {name: score}.</p></li>
+<li><p><code class="xref py py-data docutils literal notranslate"><span class="pre">scoring.size</span></code>: contains additional scores describing the size of the graphs (number of nodes, number of edges)</p></li>
+<li><p><code class="xref py py-data docutils literal notranslate"><span class="pre">scoring.score_names</span></code>: contains a dictionary to convert plain score names to short latex names.</p></li>
+</ul>
+<p>The function <a class="reference internal" href="generated/structify_net.scoring.get_default_scores.html#structify_net.scoring.get_default_scores" title="structify_net.scoring.get_default_scores"><code class="xref py py-func docutils literal notranslate"><span class="pre">scoring.get_default_scores()</span></code></a> return the default_scores in a convenient way, see below</p>
+<p>Example of code on a single graph:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">structify_net.scoring</span>
+<span class="n">g</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">karate_club_graph</span><span class="p">()</span>
+<span class="n">score</span><span class="o">=</span><span class="n">scoring</span><span class="o">.</span><span class="n">hierarchy</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="n">scoring</span><span class="o">.</span><span class="n">compute_all_scores</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Example of code on a graph model:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">structify_net.scoring</span>
+<span class="n">model</span><span class="o">=</span><span class="n">zoo</span><span class="o">.</span><span class="n">sort_nestedness</span><span class="p">(</span><span class="n">nodes</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">scores</span><span class="p">(</span><span class="n">m</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">scores</span><span class="p">(</span><span class="n">m</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span><span class="n">scores</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;coreness&quot;</span><span class="p">:</span><span class="n">scoring</span><span class="o">.</span><span class="n">coreness</span><span class="p">},</span><span class="n">epsilons</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.2</span><span class="p">],</span><span class="n">runs</span><span class="o">=</span><span class="mi">3</span><span class="p">,)</span>
+</pre></div>
+</div>
 <section id="individual-scoring-functions">
 <h2>Individual scoring functions<a class="headerlink" href="#individual-scoring-functions" title="Permalink to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
