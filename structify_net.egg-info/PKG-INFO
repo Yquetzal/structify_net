@@ -1,0 +1,16 @@
+Metadata-Version: 2.1
+Name: structify-net
+Version: 0.0.0
+Summary: Network Generation with controlled structure
+Home-page: https://github.com/Yquetzal/structify_net
+Author: Remy Cazabet
+Author-email: remy.cazabet@gmail.com
+License: BSD-Clause-2
+Keywords: network-science community-detection
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Build Tools
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+License-File: LICENSE

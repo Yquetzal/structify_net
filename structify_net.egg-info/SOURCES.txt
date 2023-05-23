@@ -1,0 +1,15 @@
+LICENSE
+MANIFEST.in
+README.md
+pyproject.toml
+setup.py
+structify_net/__init__.py
+structify_net/scoring.py
+structify_net/structureClasses.py
+structify_net/transform.py
+structify_net/viz.py
+structify_net/zoo.py
+structify_net.egg-info/PKG-INFO
+structify_net.egg-info/SOURCES.txt
+structify_net.egg-info/dependency_links.txt
+structify_net.egg-info/top_level.txt
