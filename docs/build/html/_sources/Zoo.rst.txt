@@ -21,7 +21,7 @@ There are some useful shortcuts to get collection of structures from the
 - :data:`zoo.all_models_with_m`: returns all the model functions that require a parameter `m` (Expected number of edges).
 - :data:`zoo.all_models`: returns all the models functions
 
-The function :func:`zoo.get_all_rank_models` return instanciated models. See details below.
+.. The function :func:`zoo.get_all_rank_models` return instanciated models. See details below.
 
 
 
@@ -46,9 +46,9 @@ Individual models
    zoo.sort_fractal_hierarchical
    zoo.sort_fractal_star
    
-function to get instanciated model collections
-----------------------------------------------
- .. autosummary::
-   :toctree: generated/
+.. function to get instanciated model collections
+.. ----------------------------------------------
+..  .. autosummary::
+..    :toctree: generated/
 
-   zoo.get_all_rank_models
+..    zoo.get_all_rank_models
