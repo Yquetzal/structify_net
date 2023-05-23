@@ -6,4 +6,4 @@ numpy
 scipy
 tqdm
 mock
-perlin_noise
+perlin-noise
