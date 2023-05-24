@@ -1,0 +1,9 @@
+networkx
+pandas
+matplotlib
+seaborn
+numpy
+scipy
+tqdm
+mock
+perlin-noise

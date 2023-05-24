@@ -257,6 +257,7 @@ structify_net/zoo.py
 structify_net.egg-info/PKG-INFO
 structify_net.egg-info/SOURCES.txt
 structify_net.egg-info/dependency_links.txt
+structify_net.egg-info/requires.txt
 structify_net.egg-info/top_level.txt
 structify_net/__pycache__/__init__.cpython-311.pyc
 structify_net/__pycache__/__init__.cpython-38.pyc
