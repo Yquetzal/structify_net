@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: structify-net
-Version: 0.9.43.dev1+gac86322.d20230524
+Version: 0.9.45.dev1+g1a6c901.d20230524
 Summary: Network Generation with controlled structure
 Author-email: Remy Cazabet <emy.cazabet@gmail.com>
 License: MIT
@@ -9,3 +9,7 @@ Project-URL: Source, https://github.com/Yquetzal/structify_net
 Keywords: network-science,community-detection
 Description-Content-Type: text/markdown
 License-File: LICENSE
+
+# Structify-net
+
+This library allows to generate networks with a custom structure and a fix size
