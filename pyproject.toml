@@ -4,19 +4,20 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name='structify_net'
-license='BSD-Clause-2'
+license={text = "MIT"}
 description='Network Generation with controlled structure'
 readme='pypi.md'
+authors = [
+    {name = "Remy Cazabet", email = "emy.cazabet@gmail.com"}
+]
+keywords=["network-science","community-detection"]
+dynamic = ["version"]
 
 [project.urls]
 Documentation = "http://structify-net.readthedocs.io"
 Source = "https://github.com/Yquetzal/structify_net"
 
-authors = [
-    {name = "Remy Cazabet", email = "emy.cazabet@gmail.com"}
-]
-keywords=["network-science","community-detection"]
 
-dynamic = ["version"]
+
 
 [tool.setuptools_scm]
