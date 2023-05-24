@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: structify-net
-Version: 0.9.45.dev1+g1a6c901.d20230524
+Version: 0.9.48.post0
 Summary: Network Generation with controlled structure
 Author-email: Remy Cazabet <emy.cazabet@gmail.com>
 License: MIT

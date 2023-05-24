@@ -9,11 +9,8 @@ Untitled.ipynb
 pypi.md
 pyproject.toml
 requirements.txt
+save
 .github/workflows/publish.yml
-dist/structify_net-0.0.0-py3-none-any.whl
-dist/structify_net-0.0.0.tar.gz
-dist/structify_net-0.9.43.dev1+gac86322.d20230524-py3-none-any.whl
-dist/structify_net-0.9.43.dev1+gac86322.d20230524.tar.gz
 docs/Classes.rst
 docs/Makefile
 docs/Scoring.rst
