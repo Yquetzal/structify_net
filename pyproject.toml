@@ -3,7 +3,20 @@ requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"
 
 [project]
-# version = "0.0.1"  # Remove any existing version parameter.
+name='structify_net'
+license='BSD-Clause-2'
+description='Network Generation with controlled structure',
+readme='pypi.md'
+
+[project.urls]
+Documentation = "http://structify-net.readthedocs.io"
+Source = "https://github.com/Yquetzal/structify_net"
+
+authors = [
+    {name = "Remy Cazabet", email = "emy.cazabet@gmail.com"},
+]
+keywords=["network-science","community-detection"]
+
 dynamic = ["version"]
 
 [tool.setuptools_scm]
