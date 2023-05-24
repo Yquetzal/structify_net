@@ -5,6 +5,7 @@ __license__ = "BSD-2-Clause"
 __email__ = "remy.cazabet@gmail.com"
 
 setup(name='structify_net',
+      version='{{VERSION_PLACEHOLDER}}',
       license='BSD-Clause-2',
       description='Network Generation with controlled structure',
       long_description = 'Network Generation with controlled structure',
