@@ -21,3 +21,4 @@ Source = "https://github.com/Yquetzal/structify_net"
 
 
 [tool.setuptools_scm]
+local_scheme = "no-local-version"
